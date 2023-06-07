@@ -1,11 +1,16 @@
 import ReactDOM from "react-dom/client";
-import "./styles/css/index.css";
-import SupabaseContextProvider from "./context/supabase.tsx";
 import { RouterProvider } from "react-router-dom";
-import { router } from "~/routes";
+import { AuthListener } from "./feature/auth";
+import { router } from "./routes";
+import { RecoilRoot } from "recoil";
+import { Suspense } from "react";
+import "./styles/css/index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <SupabaseContextProvider>
-    <RouterProvider router={router}></RouterProvider>
-  </SupabaseContextProvider>
+  <RecoilRoot>
+    <Suspense fallback={<div>loading</div>}>
+      <AuthListener />
+      <RouterProvider router={router} />
+    </Suspense>
+  </RecoilRoot>
 );

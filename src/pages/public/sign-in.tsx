@@ -1,4 +1,4 @@
-import { AuthForm } from "~/components";
+import { AuthForm } from "~/feature/auth";
 
 export interface SignInProps {}
 

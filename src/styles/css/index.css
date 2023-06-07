@@ -9,6 +9,15 @@
     .card{
         @apply border border-gray-300 rounded p-4
     }
+    .input{
+        @apply w-full border border-gray-300 rounded px-2 py-1
+    }
+    .button{
+        @apply duration-100 uppercase text-white text-sm font-semibold rounded bg-zinc-800 hover:bg-zinc-600 px-2 py-1 border
+    }
+    .outlined-button{
+        @apply button bg-transparent text-zinc-800 hover:bg-zinc-200
+    }
 }
 
 @layer utilities{

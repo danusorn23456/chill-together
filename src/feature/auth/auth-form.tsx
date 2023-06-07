@@ -1,12 +1,10 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { useSupabase } from "context";
+import { supabase } from "~/service/supabase";
 
 export interface AuthFormProps {}
 
 export function AuthForm({}: AuthFormProps) {
-  const supabase = useSupabase();
-
   return (
     <div className="card w-full">
       <Auth
