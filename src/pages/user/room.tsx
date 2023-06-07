@@ -1,26 +1,24 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { validate as uuidValidate } from "uuid";
-import { RoutePath } from "~/routes/type";
+import { useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userProfilesState } from "~/feature/auth/state";
+import { OnlineUserTab, Screen, useRoom } from "~/feature/room";
+import { Profile } from "~/service/supabase";
 
 export interface RoomProps {}
 
-function Room({ ...rest }: RoomProps) {
-  const { roomId } = useParams();
-  const navigate = useNavigate();
+function Room({}: RoomProps) {
+  const user = useRecoilValue(userProfilesState) as Profile;
+  const room = useRoom();
 
-  useEffect(
-    function isValidRoom() {
-      if (!roomId || !uuidValidate(roomId)) {
-        navigate(RoutePath.LOBBY);
-      } else {
-        console.info("join room %s", roomId);
-      }
-    },
-    [roomId]
+  return (
+    <div className="flex flex-1">
+      <div className="flex-1 relative">
+        <OnlineUserTab />
+        <Screen />
+      </div>
+      <div className="w-60 lg:w-96"></div>
+    </div>
   );
-
-  return <div {...rest}>Room {roomId}</div>;
 }
 
 export { Room };

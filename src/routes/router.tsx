@@ -2,7 +2,8 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import { SignIn, Lobby, Room } from "pages";
 import { RouteGuard } from "./routes-guard";
 import { RoutePath } from "./type";
-import { UserLayout } from "~/layouts";
+import { RoomLayout } from "~/layouts";
+import { RouteParamsValidator } from "./route-params-validator";
 
 const router = createBrowserRouter([
   {
@@ -17,9 +18,9 @@ const router = createBrowserRouter([
     path: "/lobby",
     element: (
       <RouteGuard role="user" redirect={RoutePath.SIGNIN}>
-        <UserLayout>
+        <RoomLayout>
           <Lobby />
-        </UserLayout>
+        </RoomLayout>
       </RouteGuard>
     ),
   },
@@ -27,9 +28,9 @@ const router = createBrowserRouter([
     path: "/room",
     element: (
       <RouteGuard>
-        <UserLayout>
+        <RoomLayout>
           <Outlet />
-        </UserLayout>
+        </RoomLayout>
       </RouteGuard>
     ),
     children: [
@@ -39,7 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: ":roomId",
-        element: <Room />,
+        element: (
+          <RouteParamsValidator params="roomId" validator={(p) => !!p}>
+            <Room />
+          </RouteParamsValidator>
+        ),
       },
     ],
   },

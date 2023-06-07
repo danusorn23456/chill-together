@@ -1,2 +1,2 @@
-export * from "./auth-listener";
+export * from "./auth-provider";
 export * from "./auth-form";
