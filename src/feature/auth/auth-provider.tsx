@@ -14,7 +14,9 @@ function AuthProvider({ children }: AuthProviderProviderProps) {
   useEffect(function wacthAuthState() {
     supabase.auth.onAuthStateChange((event, session) => {
       const userId = session?.user.id;
-      userId && setUserId(session?.user.id);
+      if (userId) {
+        setUserId(session?.user.id);
+      }
       if (event === "INITIAL_SESSION") {
       }
       if (event === "SIGNED_OUT") {
@@ -24,7 +26,7 @@ function AuthProvider({ children }: AuthProviderProviderProps) {
   }, []);
 
   if (state === "loading") {
-    return <></>;
+    return <div>loading</div>;
   }
 
   return <>{children}</>;

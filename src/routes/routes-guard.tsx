@@ -27,7 +27,7 @@ function RouteGuard({
   };
 
   if (!conditionOfRole[role](user)) {
-    console.info("navigate by routes-guard");
+    console.log("USER BEFORE NAVIGATE ", user);
     return <Navigate to={redirect} />;
   }
 

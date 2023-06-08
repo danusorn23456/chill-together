@@ -2,9 +2,8 @@ import { UserRecord } from "~/service/supabase";
 
 export type RoomID = string;
 
-export interface OnlineUser {
-  id: UserRecord["id"];
-  username: UserRecord["username"];
+export interface OnlineUser extends UserRecord {
+  is_owner: boolean;
   online_at: string;
 }
 

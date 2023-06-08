@@ -1,6 +1,7 @@
 import { atom, selector } from "recoil";
 import { UserRecord, supabase } from "~/service/supabase";
 import { APIgetUserById } from "./api-get-user-by-id";
+import { APIstall } from "../common/api";
 
 export const userIDState = atom<string | null | undefined>({
   key: "userIDState",
@@ -11,16 +12,17 @@ export const userRecordState = selector<UserRecord | null>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);
-    console.log("userId ", userID);
 
     if (!userID) {
-      return null;
+      return APIstall<null>();
     }
+
     const user = await APIgetUserById(userID);
+
     if (user.id) {
-      return user as UserRecord;
+      return user;
     }
-    supabase.auth.signOut();
-    return null;
+
+    return APIstall<null>();
   },
 });

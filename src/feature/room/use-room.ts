@@ -13,6 +13,7 @@ function useRoom() {
   const [room, setRoom] = useState<RoomRecordWithOwner>();
 
   const user = useRecoilValue(userRecordState);
+  const onlineUser = useRecoilValue(onlineUserState);
   const setOnlineUsers = useSetRecoilState(onlineUserState);
   const navigate = useNavigate();
 
@@ -52,13 +53,23 @@ function useRoom() {
 
       onlineUserChannel.on("presence", { event: "sync" }, () => {
         console.log("Online users: ", onlineUserChannel.presenceState());
-        const updateOnlineUsers = Object.values(
+        let updateOnlineUsers = Object.values(
           onlineUserChannel.presenceState()
-        )[0] as OnlineUsers;
-        if (updateOnlineUsers) {
-          console.log("update room ", updateOnlineUsers);
-          setOnlineUsers(updateOnlineUsers);
-        }
+        ).map((i) => i[0]) as OnlineUsers;
+
+        updateOnlineUsers = updateOnlineUsers.sort((a, b) => {
+          if (a.is_owner && !b.is_owner) {
+            return -1; // a should come before b
+          } else if (!a.is_owner && b.is_owner) {
+            return 1; // a should come after b
+          }
+
+          const dateA = new Date(a.online_at);
+          const dateB = new Date(b.online_at);
+
+          return dateA.getTime() - dateB.getTime();
+        });
+        setOnlineUsers(updateOnlineUsers);
       });
 
       onlineUserChannel.on(
@@ -80,6 +91,7 @@ function useRoom() {
       onlineUserChannel.subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
           const status = await onlineUserChannel.track({
+            is_owner: room?.owner_id === user.id,
             id: user.id,
             username: user.username,
             avatar_url: user.avatar_url,

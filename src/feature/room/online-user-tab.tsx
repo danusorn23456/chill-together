@@ -17,7 +17,7 @@ function OnlineUserTab({}: OnlineUserTabProps) {
         <ul>
           {onlineUsers?.map((user) => (
             <li
-              className="text-white text-xs flex space-x-2 items-center"
+              className="text-white text-xs flex space-x-2 items-center justify-end"
               key={user.id}
             >
               <span>{user.id === room?.owner_id ? "👑" : ""}</span>

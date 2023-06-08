@@ -84,7 +84,7 @@ export interface Database {
       }
       get_user_by_id: {
         Args: {
-          id: string
+          user_id: string
         }
         Returns: {
           avatar_url: string
