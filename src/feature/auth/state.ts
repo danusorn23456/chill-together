@@ -1,6 +1,5 @@
 import { atom, selector } from "recoil";
-import { UserRecord, supabase } from "~/service/supabase";
-import { APIgetUserById } from "./api-get-user-by-id";
+import { APIgetUserById, APIgetUserByIdResult } from "./api-get-user-by-id";
 import { APIstall } from "../common/api";
 
 export const userIDState = atom<string | null | undefined>({
@@ -8,7 +7,7 @@ export const userIDState = atom<string | null | undefined>({
   default: null,
 });
 
-export const userRecordState = selector<UserRecord | null>({
+export const userRecordState = selector<APIgetUserByIdResult>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);

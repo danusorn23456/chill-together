@@ -1,14 +1,11 @@
 import { useRecoilValue } from "recoil";
-import { onlineUserState } from "./state";
-import { userRecordState } from "../auth/state";
-import { useRoom } from "./use-room";
+import { onlineUserState, roomState } from "./state";
 
 export interface OnlineUserTabProps {}
 
 function OnlineUserTab({}: OnlineUserTabProps) {
   const onlineUsers = useRecoilValue(onlineUserState);
-  const { room } = useRoom();
-  const user = useRecoilValue(userRecordState);
+  const room = useRecoilValue(roomState);
 
   return (
     <div className="bg-zinc-900 absolute top-4 right-4 bg-opacity-90 rounded p-4">
@@ -20,7 +17,7 @@ function OnlineUserTab({}: OnlineUserTabProps) {
               className="text-white text-xs flex space-x-2 items-center justify-end"
               key={user.id}
             >
-              <span>{user.id === room?.owner_id ? "👑" : ""}</span>
+              <span>{user.id === room?.created_by ? "👑" : ""}</span>
               <span>{user.username}</span>
             </li>
           ))}

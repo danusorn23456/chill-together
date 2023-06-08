@@ -5,7 +5,7 @@ export type RoomRecord = Database["public"]["Tables"]["rooms"]["Row"];
 export type UUID = string;
 export type RoomRecordWithOwner = Pick<
   RoomRecord,
-  "id" | "name" | "description" | "owner_id" | "online_users"
+  "id" | "name" | "description" | "created_by" | "online_users"
 > & {
   owner: UserRecord;
 };

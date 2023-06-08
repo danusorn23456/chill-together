@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { APIgetRooms } from "./api";
-import { RoomRecordWithOwner } from "~/service/supabase";
+import { APIgetRooms, APIgetRoomsResult } from "./api";
 
-export function useRooms(): RoomRecordWithOwner[] {
-  const [rooms, setRooms] = useState<RoomRecordWithOwner[] | []>([]);
+export function useRooms() {
+  const [rooms, setRooms] = useState<APIgetRoomsResult>([]);
 
   useEffect(function getingRoomsFormDatabse() {
-    async function callAPIGetRoom() {
+    async function callAPIGetRooms() {
       const rooms = await APIgetRooms();
-      setRooms(rooms);
+      setRooms(rooms || []);
     }
-    callAPIGetRoom();
+    callAPIGetRooms();
   }, []);
 
   return rooms;

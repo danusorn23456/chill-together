@@ -9,37 +9,66 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      messages: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          message: string
+          room_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id: string
+          message: string
+          room_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          message?: string
+          room_id?: string
+        }
+        Relationships: []
+      }
       rooms: {
         Row: {
           created_at: string
+          created_by: string
           description: string
           id: string
           name: string
           online_users: number
-          owner_id: string
-          owner_username: string
           updated_at: string
         }
         Insert: {
           created_at?: string
+          created_by: string
           description: string
           id?: string
           name: string
           online_users?: number
-          owner_id: string
-          owner_username: string
           updated_at?: string
         }
         Update: {
           created_at?: string
+          created_by?: string
           description?: string
           id?: string
           name?: string
           online_users?: number
-          owner_id?: string
-          owner_username?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "rooms_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       users: {
         Row: {
@@ -66,6 +95,14 @@ export interface Database {
           updated_at?: string
           username?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -76,31 +113,51 @@ export interface Database {
         Args: {
           room_id: string
         }
-        Returns: Json
+        Returns: Database["public"]["CompositeTypes"]["room_type"]
       }
       get_rooms: {
         Args: Record<PropertyKey, never>
-        Returns: Json[]
+        Returns: Database["public"]["CompositeTypes"]["room_type"][]
       }
       get_user_by_id: {
         Args: {
           user_id: string
         }
-        Returns: {
-          avatar_url: string
-          created_at: string
-          email: string
-          id: string
-          updated_at: string
-          username: string
-        }
+        Returns: Database["public"]["CompositeTypes"]["user_type"]
       }
     }
     Enums: {
-      [_ in never]: never
+      app_permission: "messages.delete"
     }
     CompositeTypes: {
-      [_ in never]: never
+      created_by_type: {
+        id: string
+        username: string
+        avatar_url: string
+      }
+      owner_type: {
+        id: string
+        username: string
+        avatar_url: string
+      }
+      room_type: {
+        id: string
+        created_by: string
+        online_users: number
+        name: string
+        description: string
+        created_at: string
+        updated_at: string
+        owner: Database["public"]["CompositeTypes"]["owner_type"]
+      }
+      user_type: {
+        id: string
+        username: string
+        avatar_url: string
+        email: string
+        created_at: string
+        updated_at: string
+      }
     }
   }
 }

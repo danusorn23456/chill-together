@@ -5,6 +5,7 @@ export interface ScreenProps {}
 
 function Screen({}: ScreenProps) {
   const onlineUsers = useRecoilValue(onlineUserState);
+
   return (
     <div className="w-full h-full">
       <img

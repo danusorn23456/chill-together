@@ -1,41 +1,37 @@
-import { useEffect, useState } from "react";
-import { RoomRecordWithOwner, UUID, supabase } from "~/service/supabase";
+import { useEffect } from "react";
+import { UUID, supabase } from "~/service/supabase";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { onlineUserState } from "./state";
+import { onlineUserState, roomState } from "./state";
 import { useNavigate, useParams } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
-import { userRecordState } from "../auth/state";
 import { OnlineUsers, Channel } from "./type";
 import { APIgetRoomById } from "./api";
+import { userRecordState } from "../auth/state";
 
-function useRoom() {
+function useRoomListener() {
   const { roomId: id } = useParams();
-  const [room, setRoom] = useState<RoomRecordWithOwner>();
-
   const user = useRecoilValue(userRecordState);
-  const onlineUser = useRecoilValue(onlineUserState);
+  const setRoom = useSetRecoilState(roomState);
   const setOnlineUsers = useSetRecoilState(onlineUserState);
   const navigate = useNavigate();
 
-  function sendMessage(text: string) {}
-
-  async function callAPIgetRoomById(id: UUID) {
-    const room = await APIgetRoomById(id);
-    if (room) {
-      setRoom(room);
-    }
-  }
-
   useEffect(
     function isValidRoom() {
+      async function callAPIgetRoomById(id: UUID) {
+        const room = await APIgetRoomById(id);
+        if (room) {
+          setRoom(room);
+        }
+      }
+
       if (!id) {
-        console.log("room Id", id);
         navigate(RoutePath.LOBBY);
       } else if (!!id) {
+        console.log("ID IS ", id);
         callAPIgetRoomById(id);
       }
     },
-    [id]
+    [id, user]
   );
 
   useEffect(
@@ -91,7 +87,6 @@ function useRoom() {
       onlineUserChannel.subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
           const status = await onlineUserChannel.track({
-            is_owner: room?.owner_id === user.id,
             id: user.id,
             username: user.username,
             avatar_url: user.avatar_url,
@@ -108,7 +103,7 @@ function useRoom() {
     [id, user]
   );
 
-  return { room, sendMessage };
+  return null;
 }
 
-export { useRoom };
+export { useRoomListener };
