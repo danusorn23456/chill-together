@@ -1,10 +1,10 @@
-import { Profile } from "~/service/supabase";
+import { UserRecord } from "~/service/supabase";
 
 export type RoomID = string;
 
 export interface OnlineUser {
-  id: Profile["id"];
-  username: Profile["username"];
+  id: UserRecord["id"];
+  username: UserRecord["username"];
   online_at: string;
 }
 
@@ -17,6 +17,7 @@ export interface RoomMessage {
 export type OnlineUsers = OnlineUser[] | [];
 export type RoomMessages = RoomMessage[];
 
-export enum RoomChannel {
-  PREFIX = "room-",
+export enum Channel {
+  ONLINE_USERS = "online-users-channel-",
+  ROOM_MESSAGES = "room-messages-channel-",
 }

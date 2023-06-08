@@ -1,14 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userProfilesState } from "~/feature/auth/state";
+import { userRecordState } from "~/feature/auth/state";
 import { OnlineUserTab, Screen, useRoom } from "~/feature/room";
-import { Profile } from "~/service/supabase";
 
 export interface RoomProps {}
 
 function Room({}: RoomProps) {
-  const user = useRecoilValue(userProfilesState) as Profile;
-  const room = useRoom();
+  const user = useRecoilValue(userRecordState);
+  const { room } = useRoom();
 
   return (
     <div className="flex flex-1">

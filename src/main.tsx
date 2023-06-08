@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <RecoilRoot>
     <Suspense fallback={<div>loading</div>}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={router}></RouterProvider>
       </AuthProvider>
     </Suspense>
   </RecoilRoot>

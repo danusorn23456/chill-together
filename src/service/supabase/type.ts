@@ -4,48 +4,103 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json }
-  | Json[];
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
-      profiles: {
+      rooms: {
         Row: {
-          avatar_url: string;
-          created_at: string | null;
-          email: string;
-          id: string;
-          username: string;
-        };
+          created_at: string
+          description: string
+          id: string
+          name: string
+          online_users: number
+          owner_id: string
+          owner_username: string
+          updated_at: string
+        }
         Insert: {
-          avatar_url?: string;
-          created_at?: string | null;
-          email: string;
-          id?: string;
-          username: string;
-        };
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          online_users?: number
+          owner_id: string
+          owner_username: string
+          updated_at?: string
+        }
         Update: {
-          avatar_url?: string;
-          created_at?: string | null;
-          email?: string;
-          id?: string;
-          username?: string;
-        };
-      };
-    };
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          online_users?: number
+          owner_id?: string
+          owner_username?: string
+          updated_at?: string
+        }
+      }
+      users: {
+        Row: {
+          avatar_url: string
+          created_at: string
+          email: string
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          avatar_url: string
+          created_at?: string
+          email: string
+          id: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string
+          created_at?: string
+          email?: string
+          id?: string
+          updated_at?: string
+          username?: string
+        }
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      get_room_by_id: {
+        Args: {
+          room_id: string
+        }
+        Returns: Json
+      }
+      get_rooms: {
+        Args: Record<PropertyKey, never>
+        Returns: Json[]
+      }
+      get_user_by_id: {
+        Args: {
+          id: string
+        }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          email: string
+          id: string
+          updated_at: string
+          username: string
+        }
+      }
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+      [_ in never]: never
+    }
+  }
 }
-
-export type Profile = Database["public"]["Tables"]["profiles"]["Row"];

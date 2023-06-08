@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
-import { userProfilesState } from "../feature/auth/state";
-import { Profile } from "~/service/supabase";
+import { useRecoilValue } from "recoil";
+import { userRecordState } from "../feature/auth/state";
+import { UserRecord } from "~/service/supabase";
 
 export type RouteGuardRole = "public" | "nonUser" | "user";
 
@@ -11,22 +11,23 @@ export interface RouteGuardProps {
   role?: RouteGuardRole;
   redirect?: string;
 }
-export type RouteGuardRoleFuncMap = (user: Profile | null) => boolean;
+export type RouteGuardRoleFuncMap = (user: UserRecord | null) => boolean;
 
 function RouteGuard({
   children,
   role = "user",
   redirect = "/",
 }: RouteGuardProps) {
-  const { contents: user } = useRecoilValueLoadable(userProfilesState);
+  const user = useRecoilValue(userRecordState);
 
   const conditionOfRole: Record<RouteGuardRole, RouteGuardRoleFuncMap> = {
-    nonUser: (user: Profile | null) => Boolean(!user),
-    user: (user: Profile | null) => Boolean(user),
-    public: (user: Profile | null) => true,
+    nonUser: (user: UserRecord | null) => Boolean(!user),
+    user: (user: UserRecord | null) => Boolean(user),
+    public: () => true,
   };
 
   if (!conditionOfRole[role](user)) {
+    console.info("navigate by routes-guard");
     return <Navigate to={redirect} />;
   }
 

@@ -1,31 +1,26 @@
 import { atom, selector } from "recoil";
-import { Profile, supabase } from "~/service/supabase";
+import { UserRecord, supabase } from "~/service/supabase";
+import { APIgetUserById } from "./api-get-user-by-id";
 
-const defaultUserIDState = selector<string | null>({
-  key: "defaultUserIDState",
-  get: async () => {
-    const { data } = await supabase.auth.getUser();
-    return data?.user?.id || null;
-  },
-});
-
-export const userIDState = atom<string | null>({
+export const userIDState = atom<string | null | undefined>({
   key: "userIDState",
-  default: defaultUserIDState,
+  default: null,
 });
 
-export const userProfilesState = selector<Profile | null>({
+export const userRecordState = selector<UserRecord | null>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);
+    console.log("userId ", userID);
+
     if (!userID) {
       return null;
     }
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userID)
-      .single();
-    return data as Profile;
+    const user = await APIgetUserById(userID);
+    if (user.id) {
+      return user as UserRecord;
+    }
+    supabase.auth.signOut();
+    return null;
   },
 });

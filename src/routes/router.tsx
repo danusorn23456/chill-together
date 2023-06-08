@@ -3,7 +3,6 @@ import { SignIn, Lobby, Room } from "pages";
 import { RouteGuard } from "./routes-guard";
 import { RoutePath } from "./type";
 import { RoomLayout } from "~/layouts";
-import { RouteParamsValidator } from "./route-params-validator";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +26,7 @@ const router = createBrowserRouter([
   {
     path: "/room",
     element: (
-      <RouteGuard>
+      <RouteGuard role="user">
         <RoomLayout>
           <Outlet />
         </RoomLayout>
@@ -40,11 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: ":roomId",
-        element: (
-          <RouteParamsValidator params="roomId" validator={(p) => !!p}>
-            <Room />
-          </RouteParamsValidator>
-        ),
+        element: <Room />,
       },
     ],
   },
