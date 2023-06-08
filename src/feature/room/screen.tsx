@@ -1,11 +1,10 @@
-import { useRecoilValue } from "recoil";
 import bg1 from "~/assets/bg-1.jpg";
-import { onlineUserState } from "./state";
-export interface ScreenProps {}
+import { OnlineUsers } from "./type";
+export interface ScreenProps {
+  users: OnlineUsers;
+}
 
-function Screen({}: ScreenProps) {
-  const onlineUsers = useRecoilValue(onlineUserState);
-
+function Screen({ users }: ScreenProps) {
   return (
     <div className="w-full h-full">
       <img
@@ -17,7 +16,7 @@ function Screen({}: ScreenProps) {
         alt=""
       />
       <div className="absolute bottom-0 left-0 w-full h-1/2 p-8">
-        {onlineUsers.map((user) => (
+        {users.map((user) => (
           <div
             key={user.id}
             className="w-fit rounded-full flex flex-col justify-center items-center space-y-2"

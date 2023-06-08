@@ -1,20 +1,21 @@
+import { useChat } from "~/feature/chat";
 import { ChatForm } from "~/feature/chat/chat-form";
-import { OnlineUserTab, Screen, useRoomListener } from "~/feature/room";
+import { OnlineUserTab, Screen, useRoom } from "~/feature/room";
 
 export interface RoomProps {}
 
 function Room({}: RoomProps) {
-  // this function will subscribe realtime database every action ex: user join sync leave
-  useRoomListener();
+  const { onlineUsers } = useRoom();
+  const { messages, sendMessage } = useChat();
 
   return (
     <div className="flex flex-1">
       <div className="flex-1 relative">
-        <OnlineUserTab />
-        <Screen />
+        <OnlineUserTab users={onlineUsers} />
+        <Screen users={onlineUsers} />
       </div>
       <div className="w-60 lg:w-96">
-        <ChatForm />
+        <ChatForm onSubmit={sendMessage} messages={messages} />
       </div>
     </div>
   );

@@ -1,22 +1,28 @@
+import { APIgetMessagesResult } from "./api-get-messages";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { v4 } from "uuid";
-import { RoomRecordWithOwner, UserRecord, supabase } from "~/service/supabase";
+import { supabase } from "~/service/supabase";
+import { roomState } from "../room/state";
+import { userRecordState } from "../auth/state";
 
-export interface UseChatProps {
-  room: RoomRecordWithOwner;
-  user: UserRecord;
-}
+function useChat() {
+  const [messages, setMessages] = useState<APIgetMessagesResult>([]);
 
-function useChat({ room, user }: UseChatProps) {
-  const [chat, setChat] = useState();
+  const room = useRecoilValue(roomState);
+  const user = useRecoilValue(userRecordState);
+
+  function sendMessage(message: string) {
+    console.log("message : ", message);
+  }
 
   function handlePostgresChange(payload: any) {
     console.log("MESSAGE PAYLOAD", payload);
-    setChat(payload);
+    setMessages(payload);
   }
 
   useEffect(() => {
-    if (!room.id || !user.id) {
+    if (!room?.id || !user?.id) {
       return;
     }
 
@@ -50,7 +56,7 @@ function useChat({ room, user }: UseChatProps) {
     };
   }, [room, user]);
 
-  return chat;
+  return { messages, sendMessage };
 }
 
 export { useChat };

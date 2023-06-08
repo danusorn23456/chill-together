@@ -1,19 +1,41 @@
-import React from "react";
+import { FormEvent, useRef } from "react";
+import { APIgetMessagesResult } from "./api-get-messages";
 
-export interface ChatFormProps {}
+export type ChatFormSubmit = (message: string) => any;
 
-function ChatForm({}: ChatFormProps) {
+export interface ChatFormProps {
+  messages: APIgetMessagesResult;
+  onSubmit?: ChatFormSubmit;
+}
+
+function ChatForm({ messages, onSubmit }: ChatFormProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function handleSendMessage(e: FormEvent) {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    if (!inputRef.current) {
+      return console.warn("input node not found");
+    }
+    onSubmit?.(inputRef.current.value);
+    form.reset();
+  }
+
   return (
     <div className="w-full h-full bg-gray-900">
       <div className="h-full flex flex-col">
         {/* header */}
         <div className="p-4">header</div>
         {/* body */}
-        <div className="p-4 flex-1 bg-white w-full">a</div>
+        <div className="p-4 flex-1 bg-white w-full">
+          {messages.map((record) => (
+            <div id={record.id}>{record.message}</div>
+          ))}
+        </div>
         {/* form */}
         <div className="p-4">
-          <form>
-            <input className="input" type="text" />
+          <form onSubmit={handleSendMessage}>
+            <input ref={inputRef} className="input" type="text" />
           </form>
         </div>
       </div>

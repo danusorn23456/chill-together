@@ -8,8 +8,9 @@ import { OnlineUsers, Channel } from "./type";
 import { APIgetRoomById } from "./api";
 import { userRecordState } from "../auth/state";
 
-function useRoomListener() {
+function useRoom() {
   const { roomId: id } = useParams();
+  const onlineUsers = useRecoilValue(onlineUserState);
   const user = useRecoilValue(userRecordState);
   const setRoom = useSetRecoilState(roomState);
   const setOnlineUsers = useSetRecoilState(onlineUserState);
@@ -103,7 +104,7 @@ function useRoomListener() {
     [id, user]
   );
 
-  return null;
+  return { onlineUsers };
 }
 
-export { useRoomListener };
+export { useRoom };
