@@ -1,48 +1,51 @@
 import { FormEvent, useRef } from "react";
-import { useChat } from "..";
 import { useRecoilValue } from "recoil";
-import { userRecordState } from "~/feature/auth";
-import { roomState } from "~/feature/room/store";
+import { v4 } from "uuid";
+import { useUser } from "~/feature/auth";
+import { roomIdState } from "~/feature/room/store";
+import { supabase } from "~/service/supabase";
+import { messagesState } from "../store";
 
 export type ChatWidgetSubmit = (message: string) => any;
 
 export interface ChatWidgetProps {}
 
 function ChatWidget({}: ChatWidgetProps) {
-  const { messages, sendMessage } = useChat();
-  const room = useRecoilValue(roomState);
-  const user = useRecoilValue(userRecordState);
+  const user = useUser();
+  const roomId = useRecoilValue(roomIdState);
+  const messages = useRecoilValue(messagesState);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function handleSendMessage(e: FormEvent) {
+  async function handleSendMessage(e: FormEvent) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const value = inputRef?.current?.value.trim();
-    if (!value) {
-      return "incase dont'have value";
-    }
-    sendMessage?.(value);
+    const message = inputRef?.current?.value.trim();
+
+    if (!message) return console.log("message not found");
+
+    const { error } = await supabase.from("messages").insert({
+      id: v4(),
+      room_id: roomId!,
+      created_by: user.id,
+      message: message,
+    });
+
+    console.log(
+      `%c ${error ? "failed" : "success"} to send message`,
+      "background:green;color:white;padding:4px;"
+    );
+
     form.reset();
   }
 
   return (
     <div className="w-full h-full bg-gray-950">
       <div className="h-full flex flex-col">
-        {/* header */}
-        <div
-          className="p-4 flex-shrink-0 text-white bg-contain bg-no-repeat bg-right"
-          style={{
-            backgroundImage: `url(${room?.owner.avatar_url})`,
-          }}
-        >
-          <h2 className="text-lg font-bold text-pink-500">{room?.name}</h2>
-          <p>{room?.description}</p>
-        </div>
         {/* body */}
         <div className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll">
           <div className="absolute top-0 left-0 flex flex-col w-full">
-            {messages.map((record) => (
+            {messages?.map((record) => (
               <div
                 key={record.id}
                 className="p-1 flex items-center odd:bg-gray-900 even:bg-gray-950 text-white"

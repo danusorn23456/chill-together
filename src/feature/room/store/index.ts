@@ -1,2 +1,2 @@
-export * from "./online-users";
 export * from "./room";
+export * from "./users-in-room";

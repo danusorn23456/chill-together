@@ -1,29 +1,16 @@
-import { GetMessagesResult, getMessages } from "../services";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { v4 } from "uuid";
-import { userRecordState } from "~/feature/auth/store";
-import { roomState } from "~/feature/room/store";
+import { useEffect } from "react";
 import { supabase } from "~/service/supabase";
+import { getMessagesByRoomId } from "..";
+import { v4 } from "uuid";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { messagesState } from "../store";
+import { userRecordState } from "~/feature/auth";
+import { roomState } from "~/feature/room/store";
 
-function useChat() {
-  const [messages, setMessages] = useState<GetMessagesResult>([]);
-
+function useChatListener() {
+  const setMessages = useSetRecoilState(messagesState);
   const room = useRecoilValue(roomState);
   const user = useRecoilValue(userRecordState);
-
-  async function sendMessage(message: string) {
-    const { error } = await supabase.from("messages").insert({
-      id: v4(),
-      room_id: room!.id,
-      created_by: user!.id,
-      message: message,
-    });
-    console.log(
-      `%c ${error ? "failed" : "success"} to send message`,
-      "background:green;color:white;padding:4px;"
-    );
-  }
 
   function handlePostgresChange(payload: any) {
     setMessages((prev) => [
@@ -39,7 +26,7 @@ function useChat() {
     function intialMessages() {
       if (!room?.id) return;
       async function callAPIgetMessages() {
-        const messages = await getMessages();
+        const messages = await getMessagesByRoomId(room!.id);
         setMessages((prev) => [...messages, ...prev]);
       }
       callAPIgetMessages();
@@ -48,11 +35,11 @@ function useChat() {
   );
 
   useEffect(() => {
-    if (!room?.id || !user?.id) {
+    if (!room?.id) {
       return;
     }
 
-    const channel = supabase.channel("db-messages");
+    const channel = supabase.channel("db-messages-" + room.id);
 
     channel.on(
       "postgres_changes",
@@ -73,12 +60,13 @@ function useChat() {
         );
       }
     });
+
     return () => {
       channel.unsubscribe();
     };
-  }, [room, user]);
+  }, [room]);
 
-  return { messages, sendMessage };
+  return null;
 }
 
-export { useChat };
+export { useChatListener };

@@ -1,11 +1,13 @@
 import { UUID, supabase } from "~/service/supabase";
 
-export async function getMessageById(id: UUID) {
-  const { data, error } = await supabase.rpc("get_message_by_id", {
-    message_id: id,
-  });
+export async function getMessagesByRoomId(id: UUID) {
+  const { data, error } = await supabase.rpc("get_messages_by_room_id", { id });
   if (error) {
     throw error;
   }
   return data;
 }
+
+export type GetMessagesByRoomIdResult =
+  | Awaited<Promise<ReturnType<typeof getMessagesByRoomId>>>
+  | [];

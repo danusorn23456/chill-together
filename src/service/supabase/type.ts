@@ -119,6 +119,12 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["CompositeTypes"]["message_type"][]
       }
+      get_messages_by_room_id: {
+        Args: {
+          id: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["message_type"][]
+      }
       get_room_by_id: {
         Args: {
           room_id: string
@@ -131,7 +137,7 @@ export interface Database {
       }
       get_user_by_id: {
         Args: {
-          user_id: string
+          id: string
         }
         Returns: Database["public"]["CompositeTypes"]["user_type"]
       }

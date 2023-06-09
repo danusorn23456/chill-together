@@ -1,13 +1,13 @@
 import { useRecoilValue } from "recoil";
-import { onlineUserState } from "../store";
+import { usersInRoomState } from "../store";
 
-export interface OnlineUserTabProps {}
+export interface OnlineUserWidgetProps {}
 
-function OnlineUserTab({}: OnlineUserTabProps) {
-  const onlineUsers = useRecoilValue(onlineUserState);
+function OnlineUserWidget() {
+  const onlineUsers = useRecoilValue(usersInRoomState);
 
   return (
-    <div className="bg-zinc-900 absolute top-4 right-4 bg-opacity-90 rounded p-4">
+    <div className="bg-zinc-900 bg-opacity-90 rounded p-4">
       <div className="flex flex-col space-y-3">
         <h2 className="text-white text-sm leading-none">online user</h2>
         <ul>
@@ -26,4 +26,4 @@ function OnlineUserTab({}: OnlineUserTabProps) {
   );
 }
 
-export { OnlineUserTab };
+export { OnlineUserWidget };

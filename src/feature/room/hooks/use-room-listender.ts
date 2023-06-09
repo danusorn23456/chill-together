@@ -1,51 +1,32 @@
 import { useEffect } from "react";
-import { UUID, UserRecord, supabase } from "~/service/supabase";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useNavigate, useParams } from "react-router-dom";
-import { RoutePath } from "~/routes/type";
+import { UserRecord, supabase } from "~/service/supabase";
 import { OnlineUsers, Channel } from "../type";
-import { onlineUserState, roomState } from "../store";
-import { getRoomById } from "../services";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { usersInRoomState } from "../store/users-in-room";
+import { roomIdState, roomState } from "../store";
 import { userRecordState } from "~/feature/auth";
+import { useRoomId } from ".";
 
 function useRoomListener() {
-  const { roomId: id } = useParams();
+  const room_id = useRoomId();
   const user = useRecoilValue(userRecordState);
   const room = useRecoilValue(roomState);
-  const setRoom = useSetRecoilState(roomState);
-  const setOnlineUsers = useSetRecoilState(onlineUserState);
-  const navigate = useNavigate();
-
-  useEffect(
-    function isValidRoom() {
-      async function callAPIgetRoomById(id: UUID) {
-        const room = await getRoomById(id);
-        if (room) {
-          setRoom(room);
-        }
-      }
-
-      if (!id) {
-        navigate(RoutePath.LOBBY);
-      } else if (!!id) {
-        callAPIgetRoomById(id);
-      }
-    },
-    [id, user]
-  );
+  const setUsersInRoom = useSetRecoilState(usersInRoomState);
+  const setRoomId = useSetRecoilState(roomIdState);
 
   useEffect(
     function onlineUsersSubscribe() {
-      if (!user || !room) {
-        return;
-      }
-      const onlineUserChannel = supabase.channel(Channel.ONLINE_USERS + id, {
-        config: {
-          presence: {
-            key: user.id,
+      if (!user || !room) return;
+      const onlineUserChannel = supabase.channel(
+        Channel.ONLINE_USERS + room_id,
+        {
+          config: {
+            presence: {
+              key: user!.id,
+            },
           },
-        },
-      });
+        }
+      );
 
       onlineUserChannel.on("presence", { event: "sync" }, () => {
         let updateOnlineUsers = Object.values(
@@ -56,6 +37,7 @@ function useRoomListener() {
           `%c online users ${updateOnlineUsers.length}`,
           "background:royalblue;color:white;padding:4px;"
         );
+
         updateOnlineUsers = updateOnlineUsers.sort((a, b) => {
           if (a.is_owner && !b.is_owner) {
             return -1; // a should come before b
@@ -68,7 +50,8 @@ function useRoomListener() {
 
           return dateA.getTime() - dateB.getTime();
         });
-        setOnlineUsers(updateOnlineUsers);
+
+        setUsersInRoom(updateOnlineUsers);
       });
 
       onlineUserChannel.on(
@@ -97,7 +80,7 @@ function useRoomListener() {
 
       onlineUserChannel.subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
-          const status = await onlineUserChannel.track({
+          await onlineUserChannel.track({
             is_owner: room?.created_by === user.id,
             id: user.id,
             username: user.username,
@@ -116,8 +99,14 @@ function useRoomListener() {
         onlineUserChannel.untrack();
       };
     },
-    [id, user, room]
+    [room, user]
   );
+
+  useEffect(() => {
+    if (room_id) {
+      setRoomId(room_id);
+    }
+  }, [room_id]);
 
   return null;
 }

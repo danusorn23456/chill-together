@@ -1,35 +1,44 @@
-import bg from "~/assets/bg.jpg";
+import { Stage } from "@pixi/react";
+import { AnimatedCharacter } from "~/feature/character";
 import { useRecoilValue } from "recoil";
-import { onlineUserState } from "../store";
+import { usersInRoomState } from "../store";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { _ReactPixi } from "@pixi/react";
 
 export interface ScreenProps {}
 
 function Screen({}: ScreenProps) {
-  const onlineUsers = useRecoilValue(onlineUserState);
+  const [size, setSize] = useState([0, 0]);
+  const users = useRecoilValue(usersInRoomState);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const resizeTimerRef = useRef<NodeJS.Timeout>();
+
+  function handleResize() {
+    clearTimeout(resizeTimerRef.current);
+    resizeTimerRef.current = setTimeout(() => {
+      if (!wrapperRef.current) return;
+      const { width, height } = wrapperRef.current.getBoundingClientRect();
+      setSize([width, height]);
+    }, 200);
+  }
+
+  useLayoutEffect(() => {
+    handleResize();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div className="w-full h-full">
-      <img
-        className="w-full h-full block"
-        src={bg}
-        style={{
-          objectFit: "cover",
-        }}
-        alt=""
-      />
-      <div className="absolute bottom-0 left-0 w-full h-1/2 p-8">
-        {onlineUsers.map((user) => (
-          <div
-            key={user.id}
-            className="w-fit rounded-full flex flex-col justify-center items-center space-y-2"
-          >
-            <img className="w-20 h-20" src={user.avatar_url} />
-            <div className="text-white text-xs border rounded px-2">
-              {user.username}
-            </div>
-          </div>
-        ))}
-      </div>
+    <div
+      ref={wrapperRef}
+      id="stage-wrapper"
+      className="w-full h-full bg-green-200 z-0"
+    >
       <span className="sr-only">
         Image by{" "}
         <a href="https://www.freepik.com/free-vector/abstract-neon-lights-background_9840044.htm#page=5&query=perspective%20galaxy&position=0&from_view=search&track=ais">
