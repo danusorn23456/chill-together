@@ -1,16 +1,17 @@
-import { OnlineUsers } from "../type";
+import { useRecoilValue } from "recoil";
+import { onlineUserState } from "../store";
 
-export interface OnlineUserTabProps {
-  users: OnlineUsers;
-}
+export interface OnlineUserTabProps {}
 
-function OnlineUserTab({ users }: OnlineUserTabProps) {
+function OnlineUserTab({}: OnlineUserTabProps) {
+  const onlineUsers = useRecoilValue(onlineUserState);
+
   return (
     <div className="bg-zinc-900 absolute top-4 right-4 bg-opacity-90 rounded p-4">
       <div className="flex flex-col space-y-3">
         <h2 className="text-white text-sm leading-none">online user</h2>
         <ul>
-          {users?.map((user) => (
+          {onlineUsers?.map((user) => (
             <li
               className="text-white text-xs flex space-x-2 items-center justify-end"
               key={user.id}

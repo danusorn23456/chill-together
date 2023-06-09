@@ -8,9 +8,8 @@ import { onlineUserState, roomState } from "../store";
 import { getRoomById } from "../services";
 import { userRecordState } from "~/feature/auth";
 
-function useRoom() {
+function useRoomListener() {
   const { roomId: id } = useParams();
-  const onlineUsers = useRecoilValue(onlineUserState);
   const user = useRecoilValue(userRecordState);
   const room = useRecoilValue(roomState);
   const setRoom = useSetRecoilState(roomState);
@@ -120,7 +119,7 @@ function useRoom() {
     [id, user, room]
   );
 
-  return { onlineUsers };
+  return null;
 }
 
-export { useRoom };
+export { useRoomListener };
