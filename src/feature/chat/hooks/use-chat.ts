@@ -13,19 +13,26 @@ function useChat() {
   const user = useRecoilValue(userRecordState);
 
   async function sendMessage(message: string) {
-    console.log("message : ", message);
-
-    await supabase.from("messages").insert({
+    const { error } = await supabase.from("messages").insert({
       id: v4(),
       room_id: room!.id,
       created_by: user!.id,
       message: message,
     });
+    console.log(
+      `%c ${error ? "failed" : "success"} to send message`,
+      "background:green;color:white;padding:4px;"
+    );
   }
 
   function handlePostgresChange(payload: any) {
-    console.log("MESSAGE PAYLOAD : ", payload);
-    setMessages((prev) => [...prev, payload.new]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        ...payload.new,
+        owner: user,
+      },
+    ]);
   }
 
   useEffect(
@@ -60,14 +67,10 @@ function useChat() {
 
     channel.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
-        // const res = await supabase.from("messages").insert({
-        //   id: v4(),
-        //   room_id: room.id,
-        //   created_by: user.id,
-        //   message: "Welcome to Realtime!",
-        // });
-        // console.log(res);
-        console.log("subscribe to chat room");
+        console.log(
+          `%c sucess to subscribe chat`,
+          "background:green;color:white;padding:4px;"
+        );
       }
     });
     return () => {

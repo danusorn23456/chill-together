@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { UUID, supabase } from "~/service/supabase";
+import { UUID, UserRecord, supabase } from "~/service/supabase";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate, useParams } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
 import { OnlineUsers, Channel } from "../type";
 import { onlineUserState, roomState } from "../store";
 import { getRoomById } from "../services";
-import { userRecordState } from "~/feature/auth/store";
+import { userRecordState } from "~/feature/auth";
 
 function useRoom() {
   const { roomId: id } = useParams();
@@ -49,11 +49,14 @@ function useRoom() {
       });
 
       onlineUserChannel.on("presence", { event: "sync" }, () => {
-        console.log("Online users: ", onlineUserChannel.presenceState());
         let updateOnlineUsers = Object.values(
           onlineUserChannel.presenceState()
         ).map((i) => i[0]) as OnlineUsers;
 
+        console.log(
+          `%c online users ${updateOnlineUsers.length}`,
+          "background:royalblue;color:white;padding:4px;"
+        );
         updateOnlineUsers = updateOnlineUsers.sort((a, b) => {
           if (a.is_owner && !b.is_owner) {
             return -1; // a should come before b
@@ -73,7 +76,11 @@ function useRoom() {
         "presence",
         { event: "join" },
         ({ newPresences }) => {
-          console.log("New users have joined: ", newPresences);
+          const user = newPresences[0] as unknown as UserRecord;
+          console.log(
+            `%c ${user.username} in the room`,
+            "background:royalblue;color:white;padding:4px;"
+          );
         }
       );
 
@@ -81,7 +88,11 @@ function useRoom() {
         "presence",
         { event: "leave" },
         ({ leftPresences }) => {
-          console.log("Users have left: ", leftPresences);
+          const user = leftPresences[0] as unknown as UserRecord;
+          console.log(
+            `%c ${user.username} left the room`,
+            "background:royalblue;color:white;padding:4px;"
+          );
         }
       );
 
@@ -94,7 +105,10 @@ function useRoom() {
             avatar_url: user.avatar_url,
             online_at: new Date().toISOString(),
           });
-          console.log("track status is %s", status);
+          console.log(
+            `%c success to subscribe room`,
+            "background:green;color:white;padding:4px;"
+          );
         }
       });
 
