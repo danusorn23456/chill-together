@@ -24,4 +24,16 @@
     .screen-space{
         @apply px-4
     }
+    .fancy-scroll::-webkit-scrollbar {
+        @apply w-2
+    }
+    .fancy-scroll::-webkit-scrollbar-track {
+        @apply bg-gray-700
+    }
+    .fancy-scroll::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-lg
+    }
+    .fancy-scroll::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-50
+    }
 }

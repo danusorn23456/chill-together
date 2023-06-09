@@ -40,7 +40,7 @@ function ChatWidget({}: ChatWidgetProps) {
           <p>{room?.description}</p>
         </div>
         {/* body */}
-        <div className="flex-1 bg-white w-full overflow-auto relative overflow-x-hidden bg-gray-900">
+        <div className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll">
           <div className="absolute top-0 left-0 flex flex-col w-full">
             {messages.map((record) => (
               <div
