@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userRecordState } from "../feature/auth/state";
+import { userRecordState } from "~/feature/auth/store";
 import { UserRecord } from "~/service/supabase";
 
 export type RouteGuardRole = "public" | "nonUser" | "user";
@@ -27,7 +27,6 @@ function RouteGuard({
   };
 
   if (!conditionOfRole[role](user)) {
-    console.log("USER BEFORE NAVIGATE ", user);
     return <Navigate to={redirect} />;
   }
 

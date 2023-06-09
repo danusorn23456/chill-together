@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
-import { userIDState, userRecordState } from "./state";
 import { supabase } from "~/service/supabase";
+import { userIDState, userRecordState } from "../store";
 
 export interface AuthProviderProviderProps {
   children: ReactNode;

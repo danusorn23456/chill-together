@@ -1,5 +1,4 @@
-import { useChat } from "~/feature/chat";
-import { ChatForm } from "~/feature/chat/chat-form";
+import { ChatForm, useChat } from "~/feature/chat";
 import { OnlineUserTab, Screen, useRoom } from "~/feature/room";
 
 export interface RoomProps {}

@@ -1,5 +1,5 @@
 import { UUID } from "~/service/supabase";
-import { useRooms } from "./use-rooms";
+import { useRooms } from "../hooks/use-rooms";
 import lobbyBg from "~/assets/lobby.jpg";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "~/routes/type";

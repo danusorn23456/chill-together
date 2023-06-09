@@ -1,4 +1,4 @@
-import { OnlineUsers } from "./type";
+import { OnlineUsers } from "../type";
 
 export interface OnlineUserTabProps {
   users: OnlineUsers;

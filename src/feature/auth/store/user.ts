@@ -1,27 +1,27 @@
 import { atom, selector } from "recoil";
-import { APIgetUserById, APIgetUserByIdResult } from "./api-get-user-by-id";
-import { APIstall } from "../common/api";
+import { stall } from "~/feature/common";
+import { getUserById, getUserByIdResult } from "../services";
 
 export const userIDState = atom<string | null | undefined>({
   key: "userIDState",
   default: null,
 });
 
-export const userRecordState = selector<APIgetUserByIdResult>({
+export const userRecordState = selector<getUserByIdResult>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);
 
     if (!userID) {
-      return APIstall<null>();
+      return stall<null>();
     }
 
-    const user = await APIgetUserById(userID);
+    const user = await getUserById(userID);
 
     if (user.id) {
       return user;
     }
 
-    return APIstall<null>();
+    return stall<null>();
   },
 });

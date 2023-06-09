@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { APIgetRooms, APIgetRoomsResult } from "./api";
+import { GetRoomsResult, getRooms } from "../services";
 
 export function useRooms() {
-  const [rooms, setRooms] = useState<APIgetRoomsResult>([]);
+  const [rooms, setRooms] = useState<GetRoomsResult>([]);
 
   useEffect(function getingRoomsFormDatabse() {
     async function callAPIGetRooms() {
-      const rooms = await APIgetRooms();
+      const rooms = await getRooms();
       setRooms(rooms || []);
     }
     callAPIGetRooms();

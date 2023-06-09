@@ -109,6 +109,16 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_message_by_id: {
+        Args: {
+          message_id: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["message_type"]
+      }
+      get_messages: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["CompositeTypes"]["message_type"][]
+      }
       get_room_by_id: {
         Args: {
           room_id: string
@@ -134,6 +144,14 @@ export interface Database {
         id: string
         username: string
         avatar_url: string
+      }
+      message_type: {
+        id: string
+        message: string
+        created_by: string
+        room_id: string
+        created_at: string
+        owner: Database["public"]["CompositeTypes"]["owner_type"]
       }
       owner_type: {
         id: string

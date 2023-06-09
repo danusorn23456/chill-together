@@ -1,10 +1,11 @@
 import { FormEvent, useRef } from "react";
-import { APIgetMessagesResult } from "./api-get-messages";
+import { Avatar } from "../../common";
+import { GetMessagesResult } from "../services";
 
 export type ChatFormSubmit = (message: string) => any;
 
 export interface ChatFormProps {
-  messages: APIgetMessagesResult;
+  messages: GetMessagesResult;
   onSubmit?: ChatFormSubmit;
 }
 
@@ -14,10 +15,11 @@ function ChatForm({ messages, onSubmit }: ChatFormProps) {
   function handleSendMessage(e: FormEvent) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    if (!inputRef.current) {
-      return console.warn("input node not found");
+    const value = inputRef?.current?.value.trim();
+    if (!value) {
+      return "incase dont'have value";
     }
-    onSubmit?.(inputRef.current.value);
+    onSubmit?.(value);
     form.reset();
   }
 
@@ -29,7 +31,15 @@ function ChatForm({ messages, onSubmit }: ChatFormProps) {
         {/* body */}
         <div className="p-4 flex-1 bg-white w-full">
           {messages.map((record) => (
-            <div id={record.id}>{record.message}</div>
+            <div key={record.id}>
+              <Avatar
+                src={record.owner.avatar_url}
+                alt={record.owner.username}
+                width={32}
+                height={32}
+              />
+              <div>{record.message}</div>
+            </div>
           ))}
         </div>
         {/* form */}

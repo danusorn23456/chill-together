@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { UUID, supabase } from "~/service/supabase";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { onlineUserState, roomState } from "./state";
 import { useNavigate, useParams } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
-import { OnlineUsers, Channel } from "./type";
-import { APIgetRoomById } from "./api";
-import { userRecordState } from "../auth/state";
+import { OnlineUsers, Channel } from "../type";
+import { onlineUserState, roomState } from "../store";
+import { getRoomById } from "../services";
+import { userRecordState } from "~/feature/auth/store";
 
 function useRoom() {
   const { roomId: id } = useParams();
   const onlineUsers = useRecoilValue(onlineUserState);
   const user = useRecoilValue(userRecordState);
+  const room = useRecoilValue(roomState);
   const setRoom = useSetRecoilState(roomState);
   const setOnlineUsers = useSetRecoilState(onlineUserState);
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function useRoom() {
   useEffect(
     function isValidRoom() {
       async function callAPIgetRoomById(id: UUID) {
-        const room = await APIgetRoomById(id);
+        const room = await getRoomById(id);
         if (room) {
           setRoom(room);
         }
@@ -28,7 +29,6 @@ function useRoom() {
       if (!id) {
         navigate(RoutePath.LOBBY);
       } else if (!!id) {
-        console.log("ID IS ", id);
         callAPIgetRoomById(id);
       }
     },
@@ -37,8 +37,8 @@ function useRoom() {
 
   useEffect(
     function onlineUsersSubscribe() {
-      if (!user) {
-        return console.warn("user on load");
+      if (!user || !room) {
+        return;
       }
       const onlineUserChannel = supabase.channel(Channel.ONLINE_USERS + id, {
         config: {
@@ -88,6 +88,7 @@ function useRoom() {
       onlineUserChannel.subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
           const status = await onlineUserChannel.track({
+            is_owner: room?.created_by === user.id,
             id: user.id,
             username: user.username,
             avatar_url: user.avatar_url,
@@ -99,9 +100,10 @@ function useRoom() {
 
       return () => {
         onlineUserChannel.unsubscribe();
+        onlineUserChannel.untrack();
       };
     },
-    [id, user]
+    [id, user, room]
   );
 
   return { onlineUsers };
