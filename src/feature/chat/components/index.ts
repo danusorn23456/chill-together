@@ -1,1 +1,1 @@
-export * from "./chat-form";
+export * from "./chat-widget";
