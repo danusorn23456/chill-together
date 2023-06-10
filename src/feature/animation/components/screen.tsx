@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { AnimatedAvatar } from ".";
 import { useRecoilValue } from "recoil";
 import { usersInRoomState } from "~/feature/room/store";
-import backgroundSource from "~/assets/bg.jpg";
+import backgroundSource from "~/feature/common/assets/bg.jpg";
 
 export interface ScreenProps {}
 
