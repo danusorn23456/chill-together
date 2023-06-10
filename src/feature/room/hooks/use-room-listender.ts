@@ -98,14 +98,17 @@ function useRoomListener() {
     }
   }
 
-  useEffect(() => {
-    if (room_id) {
-      setRoomId(room_id);
-    }
-  }, [room_id]);
+  useEffect(
+    function performRoomId() {
+      if (room_id) {
+        setRoomId(room_id);
+      }
+    },
+    [room_id]
+  );
 
   useEffect(
-    function onlineUsersSubscribe() {
+    function performRealtimeSubscribe() {
       if (!user || !room) return;
 
       usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id, {
