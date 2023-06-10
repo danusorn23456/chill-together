@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { supabase } from "~/service/supabase";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "~/feature/auth";
-import { roomState } from "~/feature/room/store";
+import { roomState } from "~/feature/room";
 import { messagesState } from "../store";
 
 function useChatListener() {

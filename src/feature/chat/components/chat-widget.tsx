@@ -2,7 +2,7 @@ import { FormEvent, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { v4 } from "uuid";
 import { useUser } from "~/feature/auth";
-import { roomIdState } from "~/feature/room/store";
+import { roomIdState } from "~/feature/room";
 import { supabase } from "~/service/supabase";
 import { messagesState } from "../store";
 
