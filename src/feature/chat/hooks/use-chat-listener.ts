@@ -16,7 +16,7 @@ function useChatListener() {
 
   function handlePostgresChange(payload: any) {
     setMessages((prev) => [
-      ...prev,
+      ...(prev || []),
       {
         ...payload.new,
         owner: user,

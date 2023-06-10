@@ -1,18 +1,22 @@
 import { atom, selector } from "recoil";
-import { GetMessagesByRoomIdResult, getMessagesByRoomId } from "..";
+import { GetMessagesByRoomIdResponseSuccess, getMessagesByRoomId } from "..";
 import { roomIdState } from "~/feature/room/store";
 import { stall } from "~/feature/common";
 
-const defaultMessagesState = selector<GetMessagesByRoomIdResult>({
+const defaultMessagesState = selector<GetMessagesByRoomIdResponseSuccess>({
   key: "defaultMessagesState",
   get: async ({ get }) => {
     const roomId = get(roomIdState);
 
     if (!roomId) return stall<[]>();
 
-    const messages = await getMessagesByRoomId(roomId);
+    const { data: messages, error } = await getMessagesByRoomId(roomId);
 
-    return messages ? messages : stall<[]>();
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return messages;
   },
 });
 

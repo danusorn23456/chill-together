@@ -1,2 +1,2 @@
-export * from "./get-message";
-export * from "./get-message-by-id";
+export * from "./get-messages";
+export * from "./get-messages-by-id";

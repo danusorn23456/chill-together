@@ -27,7 +27,7 @@ function ChatWidget({}: ChatWidgetProps) {
     const { error } = await supabase.from("messages").insert({
       id: v4(),
       room_id: roomId!,
-      created_by: user.id,
+      created_by: user!.id,
       message: message,
     });
 
