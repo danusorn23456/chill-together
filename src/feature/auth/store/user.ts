@@ -1,13 +1,13 @@
 import { atom, selector } from "recoil";
-import { stall } from "~/feature/common";
-import { getUserById, GetUserByIdResult } from "../services";
+import { stall, supabase } from "~/feature/common";
+import { GetUserByIdResponseSuccess, getUserById } from "../services";
 
 export const userIDState = atom<string | null | undefined>({
   key: "userIDState",
   default: null,
 });
 
-export const userState = selector<GetUserByIdResult>({
+export const userState = selector<GetUserByIdResponseSuccess>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);
@@ -16,12 +16,12 @@ export const userState = selector<GetUserByIdResult>({
       return stall<null>();
     }
 
-    const user = await getUserById(userID);
+    const { data: user, error } = await getUserById(userID);
 
-    if (user.id) {
-      return user;
+    if (error) {
+      supabase.auth.signOut();
     }
 
-    return stall<null>();
+    return user;
   },
 });

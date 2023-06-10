@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
-import { User, supabase } from "~/feature/common";
+import { supabase } from "~/feature/common";
 import { Channel } from "../type";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { usersInRoomState } from "../store/users-in-room";
 import { roomIdState, roomState, UsersInRoom } from "../store";
-import { userState } from "~/feature/auth";
+import { GetUserByIdResponseSuccess, userState } from "~/feature/auth";
 import { useRoomId } from ".";
 import { randomBetween } from "~/feature/common/utils";
 import {
@@ -49,7 +49,11 @@ function useRoomListener() {
     setUsersInRoom(usersInRoom);
   }
 
-  function handleJoin({ newPresences }: RealtimePresenceJoinPayload<User>) {
+  function handleJoin({
+    newPresences,
+  }: RealtimePresenceJoinPayload<{
+    [key: string]: GetUserByIdResponseSuccess;
+  }>) {
     const user = newPresences[0];
     console.log(
       `%c ${user.username} in the room`,
@@ -57,7 +61,11 @@ function useRoomListener() {
     );
   }
 
-  function handleLeave({ leftPresences }: RealtimePresenceLeavePayload<User>) {
+  function handleLeave({
+    leftPresences,
+  }: RealtimePresenceLeavePayload<{
+    [key: string]: GetUserByIdResponseSuccess;
+  }>) {
     const user = leftPresences[0];
     console.log(
       `%c ${user.username} left the room`,

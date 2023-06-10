@@ -1,11 +1,11 @@
-import { User } from "~/feature/common";
+import { GetUserByIdResponseSuccess } from "../auth";
 
 export type RoomID = string;
 
-export interface OnlineUser extends User {
+export type OnlineUser = GetUserByIdResponseSuccess & {
   is_owner: boolean;
   online_at: string;
-}
+};
 
 export interface RoomMessage {
   sender_id: string;

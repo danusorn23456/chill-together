@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { GetUserByIdResponseSuccess } from "~/feature/auth";
 import { userState } from "~/feature/auth/store";
-import { User } from "~/feature/common";
 
 export type RouteGuardRole = "public" | "nonUser" | "user";
 
@@ -11,7 +11,10 @@ export interface RouteGuardProps {
   role?: RouteGuardRole;
   redirect?: string;
 }
-export type RouteGuardRoleFuncMap = (user: User | null) => boolean;
+
+export type RouteGuardRoleFuncMap = (
+  user: GetUserByIdResponseSuccess
+) => boolean;
 
 function RouteGuard({
   children,
@@ -21,8 +24,8 @@ function RouteGuard({
   const user = useRecoilValue(userState);
 
   const conditionOfRole: Record<RouteGuardRole, RouteGuardRoleFuncMap> = {
-    nonUser: (user: User | null) => Boolean(!user),
-    user: (user: User | null) => Boolean(user),
+    nonUser: (user: GetUserByIdResponseSuccess) => Boolean(!user),
+    user: (user: GetUserByIdResponseSuccess) => Boolean(user),
     public: () => true,
   };
 
