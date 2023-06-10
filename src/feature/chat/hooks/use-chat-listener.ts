@@ -4,11 +4,15 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "~/feature/auth";
 import { roomState } from "~/feature/room";
 import { messagesState } from "../store";
+import {
+  REALTIME_SUBSCRIBE_STATES,
+  RealtimePostgresChangesFilter,
+} from "@supabase/supabase-js";
 
 function useChatListener() {
   const room = useRecoilValue(roomState);
   const user = useRecoilValue(userState);
-  const [messages, setMessages] = useRecoilState(messagesState);
+  const [, setMessages] = useRecoilState(messagesState);
 
   function handlePostgresChange(payload: any) {
     setMessages((prev) => [
@@ -20,37 +24,44 @@ function useChatListener() {
     ]);
   }
 
-  useEffect(() => {
-    if (!room?.id) {
-      return;
+  async function handleSubscribe(status: `${REALTIME_SUBSCRIBE_STATES}`) {
+    if (status === "SUBSCRIBED") {
+      console.log(
+        `%c sucess to subscribe chat`,
+        "background:green;color:white;padding:4px;"
+      );
     }
+  }
 
-    const channel = supabase.channel("db-messages-" + room.id);
+  useEffect(
+    function performRealtimeSubscribe() {
+      if (!room?.id) {
+        return;
+      }
 
-    channel.on(
-      "postgres_changes",
-      {
+      const postgresChangesFilter = {
         event: "INSERT",
         schema: "public",
         table: "messages",
         filter: `room_id=eq.${room.id}`,
-      },
-      handlePostgresChange
-    );
+      } as RealtimePostgresChangesFilter<"INSERT">;
 
-    channel.subscribe(async (status) => {
-      if (status === "SUBSCRIBED") {
-        console.log(
-          `%c sucess to subscribe chat`,
-          "background:green;color:white;padding:4px;"
-        );
-      }
-    });
+      const channel = supabase.channel("db-messages-" + room.id);
 
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [room]);
+      channel.on(
+        "postgres_changes",
+        postgresChangesFilter,
+        handlePostgresChange
+      );
+
+      channel.subscribe(handleSubscribe);
+
+      return () => {
+        channel.unsubscribe();
+      };
+    },
+    [room]
+  );
 
   return null;
 }
