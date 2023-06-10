@@ -18,6 +18,7 @@ function useRoomListener() {
   useEffect(
     function onlineUsersSubscribe() {
       if (!user || !room) return;
+
       const usersChannel = supabase.channel(Channel.ONLINE_USERS + room_id, {
         config: {
           presence: {
@@ -80,6 +81,12 @@ function useRoomListener() {
             avatar_url: user.avatar_url,
             online_at: new Date().toISOString(),
             coordinates: [generateXPosition, generateYPosition, 0],
+          });
+
+          usersChannel.send({
+            type: "boardcast",
+            event: "a",
+            payload: "awd",
           });
 
           console.log(

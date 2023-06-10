@@ -21,7 +21,7 @@ function Screen({}: ScreenProps) {
     >
       <div className="absolute bottom-0 left-0 w-full h-1/2">
         <Canvas>
-          <perspectiveCamera>
+          <perspectiveCamera position={[0, 0, 1.5]}>
             {users.map((user) => (
               <AnimatedAvatar key={user.id} {...user} />
             ))}
