@@ -1,5 +1,6 @@
+import { Screen } from "~/feature/animation";
 import { ChatWidget, useChatListener } from "~/feature/chat";
-import { OnlineUserWidget, Screen } from "~/feature/room";
+import { OnlineUserWidget } from "~/feature/room";
 import { useRoomListener } from "~/feature/room";
 
 export interface RoomProps {}

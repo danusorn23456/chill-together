@@ -1,14 +1,14 @@
 import { ReactNode, useEffect } from "react";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { supabase } from "~/service/supabase";
-import { userIDState, userRecordState } from "../store";
+import { userIDState, userState } from "../store";
 
 export interface AuthProviderProviderProps {
   children: ReactNode;
 }
 
 function AuthProvider({ children }: AuthProviderProviderProps) {
-  const { state } = useRecoilValueLoadable(userRecordState);
+  const { state } = useRecoilValueLoadable(userState);
   const setUserId = useSetRecoilState(userIDState);
 
   useEffect(function wacthAuthState() {

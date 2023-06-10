@@ -1,11 +1,11 @@
 import { useRecoilValue } from "recoil";
-import { userRecordState } from "..";
+import { userState } from "..";
 import { UserRecord } from "~/service/supabase";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
 
 function useUser(): UserRecord {
-  const user = useRecoilValue(userRecordState);
+  const user = useRecoilValue(userState);
   const navigate = useNavigate();
 
   if (!user) {

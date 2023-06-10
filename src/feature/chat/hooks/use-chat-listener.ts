@@ -1,16 +1,14 @@
 import { useEffect } from "react";
 import { supabase } from "~/service/supabase";
-import { getMessagesByRoomId } from "..";
-import { v4 } from "uuid";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { messagesState } from "../store";
-import { userRecordState } from "~/feature/auth";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "~/feature/auth";
 import { roomState } from "~/feature/room/store";
+import { messagesState } from "../store";
 
 function useChatListener() {
-  const setMessages = useSetRecoilState(messagesState);
   const room = useRecoilValue(roomState);
-  const user = useRecoilValue(userRecordState);
+  const user = useRecoilValue(userState);
+  const [messages, setMessages] = useRecoilState(messagesState);
 
   function handlePostgresChange(payload: any) {
     setMessages((prev) => [
@@ -21,18 +19,6 @@ function useChatListener() {
       },
     ]);
   }
-
-  useEffect(
-    function intialMessages() {
-      if (!room?.id) return;
-      async function callAPIgetMessages() {
-        const messages = await getMessagesByRoomId(room!.id);
-        setMessages((prev) => [...messages, ...prev]);
-      }
-      callAPIgetMessages();
-    },
-    [room]
-  );
 
   useEffect(() => {
     if (!room?.id) {

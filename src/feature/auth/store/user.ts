@@ -7,7 +7,7 @@ export const userIDState = atom<string | null | undefined>({
   default: null,
 });
 
-export const userRecordState = selector<getUserByIdResult>({
+export const userState = selector<getUserByIdResult>({
   key: "userState",
   get: async ({ get }) => {
     const userID = get(userIDState);
