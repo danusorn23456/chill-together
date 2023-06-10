@@ -1,4 +1,4 @@
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 
 export async function getRooms() {
   const { data, error } = await supabase.rpc("get_rooms");

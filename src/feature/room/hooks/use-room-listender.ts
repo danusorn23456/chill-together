@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { UserRecord, supabase } from "~/service/supabase";
+import { User, supabase } from "~/feature/common";
 import { Channel } from "../type";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { usersInRoomState } from "../store/users-in-room";
@@ -49,9 +49,7 @@ function useRoomListener() {
     setUsersInRoom(usersInRoom);
   }
 
-  function handleJoin({
-    newPresences,
-  }: RealtimePresenceJoinPayload<UserRecord>) {
+  function handleJoin({ newPresences }: RealtimePresenceJoinPayload<User>) {
     const user = newPresences[0];
     console.log(
       `%c ${user.username} in the room`,
@@ -59,9 +57,7 @@ function useRoomListener() {
     );
   }
 
-  function handleLeave({
-    leftPresences,
-  }: RealtimePresenceLeavePayload<UserRecord>) {
+  function handleLeave({ leftPresences }: RealtimePresenceLeavePayload<User>) {
     const user = leftPresences[0];
     console.log(
       `%c ${user.username} left the room`,

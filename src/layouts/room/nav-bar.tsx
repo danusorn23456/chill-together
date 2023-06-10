@@ -1,5 +1,5 @@
 import React from "react";
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 
 export interface NavBarProps {}
 

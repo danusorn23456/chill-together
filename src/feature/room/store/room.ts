@@ -1,7 +1,7 @@
 export * from "./users-in-room";
 import { atom, selector } from "recoil";
 import { GetRoomByIdResult, getRoomById } from "../services";
-import { UUID } from "~/service/supabase";
+import { UUID } from "~/feature/common";
 import { stall } from "~/feature/common";
 
 export const roomIdState = atom<UUID | null>({

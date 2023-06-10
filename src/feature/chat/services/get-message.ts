@@ -1,4 +1,4 @@
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 
 export async function getMessages() {
   const { data, error } = await supabase.rpc("get_messages");

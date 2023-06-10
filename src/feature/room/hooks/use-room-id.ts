@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
-import { UUID } from "~/service/supabase";
+import { UUID } from "~/feature/common";
 
 function useRoomId(): UUID {
   const { roomId } = useParams();

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "~/feature/auth";
 import { roomState } from "~/feature/room";

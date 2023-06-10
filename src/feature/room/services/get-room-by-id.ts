@@ -1,4 +1,4 @@
-import { UUID, supabase } from "~/service/supabase";
+import { UUID, supabase } from "~/feature/common";
 
 export async function getRoomById(id: UUID) {
   const { data, error } = await supabase.rpc("get_room_by_id", { room_id: id });

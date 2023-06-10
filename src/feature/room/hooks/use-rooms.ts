@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetRoomsResult, getRooms } from "../services";
-import { UUID } from "~/service/supabase";
+import { UUID } from "~/feature/common";
 import { RoutePath } from "~/routes/type";
 import { useNavigate } from "react-router-dom";
 

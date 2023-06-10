@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { v4 } from "uuid";
 import { useUser } from "~/feature/auth";
 import { roomIdState } from "~/feature/room";
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 import { messagesState } from "../store";
 
 export type ChatWidgetSubmit = (message: string) => any;

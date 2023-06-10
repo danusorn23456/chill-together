@@ -1,4 +1,4 @@
-import { supabase } from "~/service/supabase";
+import { supabase } from "~/feature/common";
 
 export async function getUserById(id: string) {
   const { data, error } = await supabase.rpc("get_user_by_id", { id });
@@ -9,6 +9,6 @@ export async function getUserById(id: string) {
   return data;
 }
 
-export type getUserByIdResult = Awaited<
+export type GetUserByIdResult = Awaited<
   Promise<ReturnType<typeof getUserById>>
 > | null;
