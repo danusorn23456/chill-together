@@ -1,6 +1,6 @@
-import { GetRoomByIdResult } from "../services";
+import { GetRoomByIdResponseSuccess } from "../services";
 
-function RoomBanner(room: GetRoomByIdResult) {
+function RoomBanner(room: GetRoomByIdResponseSuccess) {
   return (
     <div
       className="p-4 flex-shrink-0 text-white bg-contain bg-no-repeat bg-right"

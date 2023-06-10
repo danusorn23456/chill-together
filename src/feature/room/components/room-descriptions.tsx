@@ -1,8 +1,8 @@
 import { MouseEventHandler } from "react";
-import { GetRoomByIdResult } from "../services";
+import { GetRoomByIdResponseSuccess } from "../services";
 
 export interface RoomDescreiptionsProps {
-  room: Required<GetRoomByIdResult>;
+  room: Required<GetRoomByIdResponseSuccess>;
   onClick: MouseEventHandler;
 }
 
@@ -15,17 +15,17 @@ function RoomDescriptions({
       <div className="flex flex-col space-y-2 items-center">
         <img
           className="w-12 h-12 bg-white rounded-full"
-          src={room!.owner.avatar_url}
+          src={room?.owner.avatar_url || ""}
           alt={`avatar of ${room!.owner.username}`}
         />
       </div>
       <div className="flex-1 flex flex-col space-y-2">
         <p className="text-white text-xs leading-none">
-          {room!.owner.username}
+          {room?.owner.username || ""}
         </p>
         <div className="flex flex-col space-y-1">
           <h2 className="text-white text-lg leading-none font-bold">
-            {room!.name}
+            {room?.name || ""}
           </h2>
           <p className="text-white leading-none">{room!.description}</p>
         </div>
