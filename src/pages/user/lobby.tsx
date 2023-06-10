@@ -7,7 +7,7 @@ function Lobby({}: LobbyProps) {
 
   return (
     <div className="bg-gray-900 h-full w-full flex flex-col justify-start items-center space-y-4 p-4">
-      {rooms.map((room) => (
+      {rooms?.map((room) => (
         <RoomDescriptions
           key={room.id}
           room={room}

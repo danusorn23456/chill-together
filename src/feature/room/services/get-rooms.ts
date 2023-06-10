@@ -1,11 +1,9 @@
 import { supabase } from "~/feature/common";
 
 export async function getRooms() {
-  const { data, error } = await supabase.rpc("get_rooms");
-  if (error) {
-    throw error;
-  }
-  return data;
+  return await supabase.rpc("get_rooms");
 }
 
-export type GetRoomsResult = Awaited<Promise<ReturnType<typeof getRooms>>>;
+export type GetRoomsResponse = Awaited<ReturnType<typeof getRooms>>;
+export type GetRoomsReponseSuccess = GetRoomsResponse["data"];
+export type GetRoomsReponseError = GetRoomsResponse["error"];

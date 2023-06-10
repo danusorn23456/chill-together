@@ -1,13 +1,9 @@
 import { UUID, supabase } from "~/feature/common";
 
 export async function getRoomById(id: UUID) {
-  const { data, error } = await supabase.rpc("get_room_by_id", { room_id: id });
-  if (error) {
-    throw error;
-  }
-  return data;
+  return await supabase.rpc("get_room_by_id", { room_id: id });
 }
 
-export type GetRoomByIdResult = Awaited<
-  Promise<ReturnType<typeof getRoomById>>
-> | null;
+export type GetRoomByIdResponse = Awaited<ReturnType<typeof getRoomById>>;
+export type GetRoomByIdResponseSuccess = GetRoomByIdResponse["data"];
+export type GetRoomByIdResponseError = GetRoomByIdResponse["error"];

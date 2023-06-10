@@ -1,11 +1,11 @@
 import { atom } from "recoil";
-import { GetUserByIdResult } from "~/feature/auth/services";
+import { GetUserByIdResponseSuccess } from "~/feature/auth";
 
 export type UserInRoom = {
   is_owner: boolean;
   online_at: string;
   coordinates: [number, number, number];
-} & GetUserByIdResult;
+} & GetUserByIdResponseSuccess;
 
 export type UsersInRoom = UserInRoom[];
 

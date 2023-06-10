@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { GetRoomsResult, getRooms } from "../services";
+import { GetRoomsReponseSuccess, getRooms } from "../services";
 import { UUID } from "~/feature/common";
 import { RoutePath } from "~/routes/type";
 import { useNavigate } from "react-router-dom";
 
 export function useRooms() {
-  const [rooms, setRooms] = useState<GetRoomsResult>([]);
+  const [rooms, setRooms] = useState<GetRoomsReponseSuccess>();
   const navigate = useNavigate();
 
   function join(id: UUID) {
@@ -14,8 +14,13 @@ export function useRooms() {
 
   useEffect(function getingRoomsFormDatabse() {
     async function callAPIGetRooms() {
-      const rooms = await getRooms();
-      setRooms(rooms || []);
+      const { data: rooms, error } = await getRooms();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setRooms(rooms);
     }
     callAPIGetRooms();
   }, []);
