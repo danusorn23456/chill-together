@@ -26,7 +26,7 @@ function AuthProvider({ children }: AuthProviderProviderProps) {
   }, []);
 
   if (state === "loading") {
-    return <div>loading</div>;
+    return <></>;
   }
 
   return <>{children}</>;

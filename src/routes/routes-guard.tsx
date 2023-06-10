@@ -33,7 +33,7 @@ function RouteGuard({
     return <Navigate to={redirect} />;
   }
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }
 
 export { RouteGuard };
