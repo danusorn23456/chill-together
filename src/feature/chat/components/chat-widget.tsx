@@ -1,4 +1,4 @@
-import { FormEvent, UIEvent, useEffect, useRef } from "react";
+import { FormEvent, useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useUser } from "~/feature/auth";
 import { roomIdState } from "~/feature/room";
