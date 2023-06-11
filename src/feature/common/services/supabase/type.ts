@@ -109,21 +109,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      get_message_by_id: {
-        Args: {
-          message_id: string
-        }
-        Returns: Database["public"]["CompositeTypes"]["message_type"]
-      }
       get_messages: {
         Args: Record<PropertyKey, never>
-        Returns: Database["public"]["CompositeTypes"]["message_type"][]
+        Returns: Database["public"]["CompositeTypes"]["get_messages_type"][]
       }
       get_messages_by_room_id: {
         Args: {
           id: string
         }
-        Returns: Database["public"]["CompositeTypes"]["message_type"][]
+        Returns: Database["public"]["CompositeTypes"]["get_messages_by_room_id_type"][]
       }
       get_room_by_id: {
         Args: {
@@ -133,13 +127,21 @@ export interface Database {
       }
       get_rooms: {
         Args: Record<PropertyKey, never>
-        Returns: Database["public"]["CompositeTypes"]["room_type"][]
+        Returns: Database["public"]["CompositeTypes"]["get_rooms_return"][]
       }
       get_user_by_id: {
         Args: {
           id: string
         }
         Returns: Database["public"]["CompositeTypes"]["user_type"]
+      }
+      send_message: {
+        Args: {
+          room_id: string
+          created_by: string
+          message: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["send_message_type"]
       }
     }
     Enums: {
@@ -151,15 +153,45 @@ export interface Database {
         username: string
         avatar_url: string
       }
+      get_messages_by_room_id_type: {
+        id: string
+        message: string
+        room_id: string
+        created_by: string
+        created_at: string
+        sender: Database["public"]["CompositeTypes"]["sender_type"]
+      }
+      get_messages_type: {
+        id: string
+        message: string
+        room_id: string
+        created_by: string
+        created_at: string
+        sender: Database["public"]["CompositeTypes"]["sender_type"]
+      }
+      get_rooms_return: {
+        id: string
+        name: string
+        description: string
+        online_users: number
+        created_by: string
+        created_at: string
+        updated_at: string
+        owner: Database["public"]["CompositeTypes"]["room_owner_type"]
+      }
       message_type: {
         id: string
         message: string
         created_by: string
         room_id: string
         created_at: string
-        owner: Database["public"]["CompositeTypes"]["owner_type"]
       }
       owner_type: {
+        id: string
+        username: string
+        avatar_url: string
+      }
+      room_owner_type: {
         id: string
         username: string
         avatar_url: string
@@ -172,7 +204,21 @@ export interface Database {
         description: string
         created_at: string
         updated_at: string
-        owner: Database["public"]["CompositeTypes"]["owner_type"]
+      }
+      send_message_return: {
+        room_id: string
+        created_by: string
+        message: string
+      }
+      send_message_type: {
+        room_id: string
+        created_by: string
+        message: string
+      }
+      sender_type: {
+        id: string
+        username: string
+        avatar_url: string
       }
       user_type: {
         id: string

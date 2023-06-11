@@ -1,10 +1,9 @@
 import { FormEvent, useRef } from "react";
 import { useRecoilValue } from "recoil";
-import { v4 } from "uuid";
 import { useUser } from "~/feature/auth";
 import { roomIdState } from "~/feature/room";
-import { supabase } from "~/feature/common";
 import { messagesState } from "../store";
+import { sendMessage } from "../services/send-message";
 
 export type ChatWidgetSubmit = (message: string) => any;
 
@@ -24,11 +23,10 @@ function ChatWidget({}: ChatWidgetProps) {
 
     if (!message) return console.log("message not found");
 
-    const { error } = await supabase.from("messages").insert({
-      id: v4(),
+    const { error } = await sendMessage({
+      message: message,
       room_id: roomId!,
       created_by: user!.id,
-      message: message,
     });
 
     console.log(
@@ -50,7 +48,9 @@ function ChatWidget({}: ChatWidgetProps) {
                 key={record.id}
                 className="p-1 flex items-center odd:bg-gray-900 even:bg-gray-950 text-white"
               >
-                <p className="text-xs text-blue-400">{record.owner.username}</p>
+                <p className="text-xs text-blue-400">
+                  {record.sender.username}
+                </p>
                 <p className="text-xs ml-2 leading-none whitespace-normal break-all">
                   {record.message}
                 </p>
