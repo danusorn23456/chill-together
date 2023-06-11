@@ -26,7 +26,7 @@ function ChatWidget({}: ChatWidgetProps) {
     const { error } = await sendMessage({
       message: message,
       room_id: roomId!,
-      created_by: user!.id,
+      sender_id: user!.id,
     });
 
     console.log(

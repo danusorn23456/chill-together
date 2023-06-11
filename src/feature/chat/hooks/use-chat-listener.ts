@@ -19,7 +19,7 @@ function useChatListener() {
       ...(prev || []),
       {
         ...payload.new,
-        owner: user,
+        sender: user,
       },
     ]);
   }

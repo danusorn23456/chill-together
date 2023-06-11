@@ -12,24 +12,24 @@ export interface Database {
       messages: {
         Row: {
           created_at: string
-          created_by: string
           id: string
           message: string
           room_id: string
+          sender_id: string
         }
         Insert: {
           created_at?: string
-          created_by: string
-          id: string
+          id?: string
           message: string
           room_id: string
+          sender_id: string
         }
         Update: {
           created_at?: string
-          created_by?: string
           id?: string
           message?: string
           room_id?: string
+          sender_id?: string
         }
         Relationships: []
       }
@@ -123,22 +123,22 @@ export interface Database {
         Args: {
           room_id: string
         }
-        Returns: Database["public"]["CompositeTypes"]["room_type"]
+        Returns: Database["public"]["CompositeTypes"]["get_room_by_id_type"]
       }
       get_rooms: {
         Args: Record<PropertyKey, never>
-        Returns: Database["public"]["CompositeTypes"]["get_rooms_return"][]
+        Returns: Database["public"]["CompositeTypes"]["get_rooms_type"][]
       }
       get_user_by_id: {
         Args: {
           id: string
         }
-        Returns: Database["public"]["CompositeTypes"]["user_type"]
+        Returns: Database["public"]["CompositeTypes"]["get_user_by_id_type"]
       }
       send_message: {
         Args: {
           room_id: string
-          created_by: string
+          sender_id: string
           message: string
         }
         Returns: Database["public"]["CompositeTypes"]["send_message_type"]
@@ -157,7 +157,7 @@ export interface Database {
         id: string
         message: string
         room_id: string
-        created_by: string
+        sender_id: string
         created_at: string
         sender: Database["public"]["CompositeTypes"]["sender_type"]
       }
@@ -165,9 +165,19 @@ export interface Database {
         id: string
         message: string
         room_id: string
-        created_by: string
+        sender_id: string
         created_at: string
         sender: Database["public"]["CompositeTypes"]["sender_type"]
+      }
+      get_room_by_id_type: {
+        id: string
+        name: string
+        description: string
+        online_users: number
+        created_at: string
+        updated_at: string
+        created_by: string
+        owner: Database["public"]["CompositeTypes"]["room_owner_type"]
       }
       get_rooms_return: {
         id: string
@@ -177,7 +187,24 @@ export interface Database {
         created_by: string
         created_at: string
         updated_at: string
+      }
+      get_rooms_type: {
+        id: string
+        name: string
+        description: string
+        online_users: number
+        created_at: string
+        updated_at: string
+        created_by: string
         owner: Database["public"]["CompositeTypes"]["room_owner_type"]
+      }
+      get_user_by_id_type: {
+        id: string
+        username: string
+        avatar_url: string
+        email: string
+        created_at: string
+        updated_at: string
       }
       message_type: {
         id: string
@@ -212,7 +239,7 @@ export interface Database {
       }
       send_message_type: {
         room_id: string
-        created_by: string
+        sender_id: string
         message: string
       }
       sender_type: {
