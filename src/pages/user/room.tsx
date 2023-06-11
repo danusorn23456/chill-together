@@ -1,6 +1,6 @@
 import { Screen } from "~/feature/animation";
 import { ChatWidget, useChatListener } from "~/feature/chat";
-import { OnlineUserWidget } from "~/feature/room";
+import { OnlineUserWidget, RoomBanner } from "~/feature/room";
 import { useRoomListener } from "~/feature/room";
 
 export interface RoomProps {}
@@ -19,7 +19,8 @@ function Room({}: RoomProps) {
         </div>
         <Screen />
       </div>
-      <div className="w-60 lg:w-96 flex flex-col overflow-hidden">
+      <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900">
+        <RoomBanner />
         <ChatWidget />
       </div>
     </div>

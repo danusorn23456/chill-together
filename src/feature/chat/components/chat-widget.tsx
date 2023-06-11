@@ -66,6 +66,12 @@ function ChatWidget({}: ChatWidgetProps) {
           className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll"
         >
           <div className="absolute top-0 left-0 flex flex-col w-full">
+            <div className="animate-fade-in p-1 flex items-center odd:bg-gray-900 even:bg-gray-950 text-white">
+              <p className="text-xs text-blue-400">system</p>
+              <p className="text-xs ml-2 leading-none whitespace-normal break-all">
+                let chill together...
+              </p>
+            </div>
             {messages?.map((record, index) => (
               <div
                 key={record.id}
