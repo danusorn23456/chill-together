@@ -11,8 +11,7 @@ export interface ChatWidgetProps {}
 
 function ChatWidget({}: ChatWidgetProps) {
   const latestMessageId = "latest-message";
-
-  const messageContent = useRef<HTMLDivElement>(null);
+  const scrollWrapper = useRef<HTMLDivElement>(null);
 
   const user = useUser();
   const roomId = useRecoilValue(roomIdState);
@@ -41,19 +40,17 @@ function ChatWidget({}: ChatWidgetProps) {
     form.reset();
   }
 
-  function activateManualScroll(e: UIEvent) {
-    console.log("E IS ", e);
-  }
-
   useEffect(
     function scrollToLastMessage() {
-      if (!messages || !user) return;
+      if (!messages || !user || !scrollWrapper.current) return;
+      const { scrollTop, scrollHeight, clientHeight } = scrollWrapper.current;
+      const maxScrollTop = scrollHeight - clientHeight;
       const latestMessageNode = document.getElementById(
         latestMessageId
       ) as HTMLDivElement;
-      const lastMessageSendingByMe =
-        messages[messages.length - 1].sender_id === user.id;
-      if (latestMessageNode && lastMessageSendingByMe) {
+      // close to 30% of the bottom
+      const nearBottomMessage = scrollTop >= maxScrollTop - maxScrollTop * 0.3;
+      if (latestMessageNode && nearBottomMessage) {
         latestMessageNode.scrollIntoView({ behavior: "smooth" });
       }
     },
@@ -64,12 +61,11 @@ function ChatWidget({}: ChatWidgetProps) {
     <div className="w-full h-full bg-gray-950">
       <div className="h-full flex flex-col">
         {/* body */}
-        <div className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll">
-          <div
-            ref={messageContent}
-            onScroll={activateManualScroll}
-            className="absolute top-0 left-0 flex flex-col w-full"
-          >
+        <div
+          ref={scrollWrapper}
+          className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll"
+        >
+          <div className="absolute top-0 left-0 flex flex-col w-full">
             {messages?.map((record, index) => (
               <div
                 key={record.id}
