@@ -4,6 +4,7 @@ import { useUser } from "~/feature/auth";
 import { roomIdState } from "~/feature/room";
 import { messagesState } from "../store";
 import { sendMessage } from "../services/send-message";
+import { motion } from "framer-motion-3d";
 
 export type ChatWidgetSubmit = (message: string) => any;
 
@@ -44,7 +45,10 @@ function ChatWidget({}: ChatWidgetProps) {
         <div className="flex-1 w-full overflow-auto relative overflow-x-hidden bg-gray-900 fancy-scroll">
           <div className="absolute top-0 left-0 flex flex-col w-full">
             {messages?.map((record) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
                 key={record.id}
                 className="p-1 flex items-center odd:bg-gray-900 even:bg-gray-950 text-white"
               >
@@ -54,7 +58,7 @@ function ChatWidget({}: ChatWidgetProps) {
                 <p className="text-xs ml-2 leading-none whitespace-normal break-all">
                   {record.message}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
