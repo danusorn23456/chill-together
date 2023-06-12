@@ -42,7 +42,7 @@ function Tab({ defaultActiveKey = "", items }: TabProps) {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex flex-shrink-0">
+      <div className="flex flex-shrink-0 border-b border-gray-950">
         {items.map((item, index) => (
           <div
             style={{
