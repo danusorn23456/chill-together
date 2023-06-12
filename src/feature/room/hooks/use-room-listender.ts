@@ -13,6 +13,8 @@ import {
   RealtimePresenceJoinPayload,
   RealtimePresenceLeavePayload,
 } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
+import { RoutePath } from "~/routes/type";
 
 function useRoomListener() {
   const room_id = useRoomId();
@@ -20,8 +22,12 @@ function useRoomListener() {
   const room = useRecoilValue(roomState);
   const setUsersInRoom = useSetRecoilState(usersInRoomState);
   const setRoomId = useSetRecoilState(roomIdState);
-
+  const navigate = useNavigate();
   const usersChannel = useRef<RealtimeChannel>();
+
+  function leaveRoom() {
+    navigate(RoutePath.LOBBY);
+  }
 
   function handleSync() {
     let usersInRoom = Object.values(usersChannel!.current!.presenceState()).map(
@@ -141,7 +147,7 @@ function useRoomListener() {
     [room, user]
   );
 
-  return null;
+  return { leaveRoom };
 }
 
 export { useRoomListener };
