@@ -140,6 +140,7 @@ function useRoomListener() {
       channel.subscribe(handleSubScribe);
 
       return () => {
+        setUsersInRoom([]);
         channel.unsubscribe();
         channel.untrack();
       };
