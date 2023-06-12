@@ -16,26 +16,32 @@ function AnimatedAvatar(user: UserInRoom) {
         }}
         position={[x, y, z]}
         animate={{
-          y: y + 0.1,
+          y: [y, y + 1, y],
           transition: {
             repeat: Infinity,
-            duration: 0.5,
+            duration: 1,
+            repeatDelay: 5,
             repeatType: "reverse",
           },
         }}
       >
         <motion.spriteMaterial
-          rotation={-0.05}
+          rotation={0}
           animate={
             {
-              rotation: 0.05,
+              rotation: [0, Math.PI * 2],
             } as any
           }
-          transition={{ repeat: Infinity, duration: 1, repeatType: "reverse" }}
+          transition={{
+            repeat: Infinity,
+            duration: 1,
+            repeatDelay: 5,
+            repeatType: "loop",
+          }}
           map={texture}
         />
       </motion.sprite>
-      <Text color="white" scale={0.2} position={[x, y - 0.6, z]}>
+      <Text color="white" scale={0.2} position={[x, y - 0.7, z]}>
         {user.username}
       </Text>
     </>
