@@ -83,8 +83,8 @@ function useRoomListener() {
     const channel = usersChannel.current;
 
     if (status === "SUBSCRIBED") {
-      const generateXPosition = randomBetween(5, -5);
-      const generateYPosition = randomBetween(1, -3);
+      const generateXPosition = randomBetween(3, -3);
+      const generateYPosition = randomBetween(-1, -2);
 
       await channel!.track({
         is_owner: room?.created_by === user!.id,
