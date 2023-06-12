@@ -17,14 +17,8 @@ function RoomBanner() {
         {room?.name}
       </h2>
       <p className="z-20 text-white">{room?.description}</p>
-      <button
-        onClick={leaveRoom}
-        className="z-20 mt-2 border px-3 rounded text-sm text-red-500 border-red-500 hover:bg-white hover:text-red-500 [&:hover_+_img]:translate-y-1"
-      >
-        leave
-      </button>
       <img
-        className="z-0 duration-200 absolute top-1/2 -translate-y-1/2 right-4 w-20 h-20"
+        className="z-0 duration-200 absolute top-1/2 -translate-y-1/2 right-4 w-14 h-14"
         src={room?.owner.avatar_url}
       />
     </div>

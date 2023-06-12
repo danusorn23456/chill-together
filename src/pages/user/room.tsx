@@ -31,6 +31,7 @@ function Room({}: RoomProps) {
     {
       key: "users",
       icon: <UserCircleIcon />,
+      content: <OnlineUserWidget />,
     },
     {
       key: "leave",
@@ -45,9 +46,6 @@ function Room({}: RoomProps) {
   return (
     <div className="flex flex-1">
       <div className="flex-1 relative">
-        <div className="absolute top-4 right-4 z-10">
-          <OnlineUserWidget />
-        </div>
         <Screen />
       </div>
       <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900">
