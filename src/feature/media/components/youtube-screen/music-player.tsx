@@ -81,7 +81,7 @@ function MusicPlayer({ isOwner }: MusicPlayerProps) {
       />
       <div className="text-center z-10 absolute top-full w-full p-2">
         <p ref={durationNodeRef} className="text-white sr-only"></p>
-        <div className="flex space-x-1">
+        <div className="flex space-x-1 justify-center">
           {isOwner && (
             <div className="relative">
               <StopCircleIcon className="w-8 h-8 text-white" />
