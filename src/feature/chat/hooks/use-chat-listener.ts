@@ -36,6 +36,10 @@ function useChatListener() {
     }
   }
 
+  async function handleLeave() {
+    setMessages([]);
+  }
+
   useEffect(
     function performRealtimeSubscribe() {
       if (!room?.id || !users) {
@@ -60,6 +64,14 @@ function useChatListener() {
       );
 
       channel.subscribe(handleSubscribe);
+
+      channel.on(
+        "presence",
+        {
+          event: "leave",
+        },
+        handleLeave
+      );
 
       return () => {
         channel.unsubscribe();
