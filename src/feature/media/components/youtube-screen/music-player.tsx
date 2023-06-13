@@ -27,29 +27,32 @@ function MusicPlayer({ isOwner }: MusicPlayerProps) {
     }
   }
 
+  /**attach youtub iframe base on html element.id = youtube-player */
   function initialYoutubeIFrame() {
     playerRef.current = YouTubePlayer("youtube-player");
   }
 
   async function handlePlay() {
     if (!playerRef.current || !music) return;
-    // get timer in second unit by calc played_at wuth current time
+    /** get timer in second unit by calc played_at wuth current time*/
     playTimeRef.current = difTimeInSecond(music.played_at);
 
-    // load by id with time in second unit
+    /**  load by id with time in second unit*/
     await playerRef.current.loadVideoById(
       music.playlist_id,
       playTimeRef.current
     );
 
-    // in case we play this song again we need to call seek function to tell youtube clear previous duration
+    /** in case we play this song again we need to call seek function to tell youtube clear previous duration */
     if (playTimeRef.current === 0) {
       playerRef.current.seekTo(0, true);
     }
 
     await playerRef.current.playVideo();
   }
-
+  /** this function use for tracking time and paint in to html element
+  if you want to see the result in page remove class sr-only in
+  element that have durationNodeRef */
   async function trackingVideoTime() {
     if (durationNodeRef.current && playerRef.current) {
       const duration = await playerRef.current.getCurrentTime();

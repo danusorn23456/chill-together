@@ -7,6 +7,16 @@ export interface RoomDescreiptionsProps {
   onClick: MouseEventHandler;
 }
 
+/**
+ * This is a TypeScript React component that renders a room description with an option to join the
+ * room.
+ * @param {RoomDescreiptionsProps}  - - `isMe`: a boolean value indicating whether the current user is
+ * the owner of the room
+ * @returns This code is returning a React functional component called `RoomDescriptions`. It takes in
+ * props such as `isMe`, `room`, and `onClick`, and returns a JSX element that renders a room
+ * description with the owner's username, room name, room description, and a button to join the room.
+ * The component also conditionally applies CSS classes based on the `isMe` prop.
+ */
 function RoomDescriptions({
   isMe,
   room,

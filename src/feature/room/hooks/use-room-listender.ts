@@ -17,6 +17,11 @@ import { useNavigate } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
 import { getRoomById } from "../services";
 
+/**
+ * The `useRoomListener` function sets up a real-time subscription to a Supabase channel for online
+ * users in a specific room and handles various events related to user presence in the room.
+ * @returns An object with a `leaveRoom` function.
+ */
 function useRoomListener() {
   const room_id = useRoomId();
   const user = useRecoilValue(userState);
@@ -52,7 +57,6 @@ function useRoomListener() {
       return dateA.getTime() - dateB.getTime();
     });
 
-    console.info(usersInRoom);
     setUsersInRoom(usersInRoom);
   }
 

@@ -8,6 +8,7 @@ export interface AnimatedAvatarProps {}
 function AnimatedAvatar(user: UserInRoom) {
   const [x, y, z] = user.coordinates;
   const texture = useTexture(user.avatar_url);
+  /**this delay is for extra delay*/
   const delay = randomBetween(0.1, 0.5);
   const delayBeforeJump = 3;
 

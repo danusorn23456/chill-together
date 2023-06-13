@@ -11,6 +11,12 @@ import {
 import { Channel } from "~/feature/room/type";
 import { getMessagesByRoomId } from "..";
 
+/**
+ * The `useChatListener` function sets up a real-time chat listener using Supabase to listen for
+ * changes in a chat room and update the messages accordingly.
+ * @returns null is being returned.
+ */
+
 function useChatListener() {
   const room = useRecoilValue(roomState);
   const users = useRecoilValue(usersInRoomState);

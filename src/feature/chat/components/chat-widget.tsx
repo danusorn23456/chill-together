@@ -9,6 +9,11 @@ export type ChatWidgetSubmit = (message: string) => any;
 
 export interface ChatWidgetProps {}
 
+/**
+ * This is a TypeScript React component for a chat widget that allows users to send and receive
+ * messages in a chat room. use global `messageState`
+ *
+ */
 function ChatWidget({}: ChatWidgetProps) {
   const roomId = useRoomId();
   const latestMessageId = "latest-message";

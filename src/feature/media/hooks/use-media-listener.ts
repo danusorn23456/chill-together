@@ -11,6 +11,11 @@ import { Channel } from "~/feature/room";
 import { GetPlayedPlaylistResponseSuccess, musicState } from "..";
 import { getPlayedPlaylist } from "..";
 
+/**
+ * This function sets up a real-time subscription to changes in a media playlist for a specific room
+ * and updates the state accordingly.
+ * @returns null.
+ */
 function useMediaListener() {
   const room = useRecoilValue(roomState);
   const channelRef = useRef<RealtimeChannel>();

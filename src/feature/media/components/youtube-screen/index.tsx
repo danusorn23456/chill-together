@@ -9,6 +9,7 @@ import { useEffect } from "react";
 
 export interface YoutubeScreenProps {}
 
+/**iframe screen to play music using many global to handle `musicState` `roomState` `userState`*/
 function YoutubeScreen({ ...rest }: YoutubeScreenProps) {
   const music = useRecoilValue(musicState);
   const room = useRecoilValue(roomState);
@@ -18,6 +19,7 @@ function YoutubeScreen({ ...rest }: YoutubeScreenProps) {
   const isOwner = user?.id === room?.owner.id;
 
   useEffect(() => {
+    // set layout title on the top leaft screen
     const title =
       (music?.playlist_title && `🎶 ${music?.playlist_title}`) ||
       "...waiting for some music";
@@ -30,7 +32,6 @@ function YoutubeScreen({ ...rest }: YoutubeScreenProps) {
         {...rest}
         className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-2 aspect-video relative z-20 bg-gray-900 flex items-center rounded-md"
       >
-        {/* <input className="input" onChange={handleChange} /> */}
         {!music?.playlist_id ? (
           isOwner ? (
             <MusicsList />

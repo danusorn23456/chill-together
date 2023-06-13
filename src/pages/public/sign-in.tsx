@@ -1,8 +1,10 @@
 import { AuthForm } from "~/feature/auth";
 
-export interface SignInProps {}
+/**
+ * baisc sign page with AithForm
+ */
 
-function SignIn({}: SignInProps) {
+function SignIn() {
   return (
     <div className="absolute-center w-full sm:max-w-sm h-full md:h-auto flex items-center screen-space">
       <AuthForm />

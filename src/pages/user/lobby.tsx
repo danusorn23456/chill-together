@@ -2,9 +2,14 @@ import { useRecoilValue } from "recoil";
 import { userState } from "~/feature/auth";
 import { RoomDescriptions, useRooms } from "~/feature/room";
 
-export interface LobbyProps {}
+/** This is a functional component called `Lobby` that renders a list of available rooms for users to
+join. It uses the `useRooms` hook to get the list of rooms and the `useRecoilValue` hook to get the
+current user's information from the `userState` atom. It then filters the list of rooms to exclude
+the user's own room (if they have one) and renders the remaining rooms using the `RoomDescriptions`
+component. The `join` function is passed as a callback to the `onClick` event of each
+`RoomDescriptions` component, allowing users to join a room by clicking on it. */
 
-function Lobby({}: LobbyProps) {
+function Lobby() {
   const { rooms, join } = useRooms();
   const user = useRecoilValue(userState);
   const otherRooms = rooms?.filter((room) => room.owner.id !== user?.id);

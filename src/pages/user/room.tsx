@@ -10,14 +10,18 @@ import { YoutubeScreen, useMediaListener } from "~/feature/media";
 import { OnlineUserWidget, RoomBanner } from "~/feature/room";
 import { useRoomListener } from "~/feature/room";
 
-export interface RoomProps {}
+/** This is a functional component called `Room` that renders a room page with various features such as
+media player, chat widget, and online user list. It also manages the global state of these features
+using custom hooks `useRoomListener`, `useMediaListener`, and `useChatListener` */
 
-function Room({}: RoomProps) {
-  // perform realtime subscribe
-  // main work of listener is to set state global state of each event
+function Room() {
+  // manage room feature global state
   const { leaveRoom } = useRoomListener();
+  // manage media feature global state
   useMediaListener();
+  // manage chat feature global state
   useChatListener();
+  // after listener you can access global state of all feature everywhere
 
   const tabItems: TabItems = [
     {

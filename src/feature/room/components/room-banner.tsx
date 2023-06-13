@@ -1,6 +1,13 @@
 import { useRecoilValue } from "recoil";
 import { roomState } from "..";
 
+/**
+ * This is a React component that displays a banner for a room, including the room name, description,
+ * and owner's avatar.
+ * @returns The RoomBanner component is being returned, which renders a banner for a room. The banner
+ * includes the room name, description, and the avatar of the room owner. The room data is obtained
+ * using the useRecoilValue hook from the roomState atom.
+ */
 function RoomBanner() {
   const room = useRecoilValue(roomState);
 
