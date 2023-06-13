@@ -1,12 +1,14 @@
 import { Text, useTexture } from "@react-three/drei";
 import { UserInRoom } from "~/feature/room";
 import { motion } from "framer-motion-3d";
+import { randomBetween } from "~/feature/common";
 
 export interface AnimatedAvatarProps {}
 
 function AnimatedAvatar(user: UserInRoom) {
   const [x, y, z] = user.coordinates;
   const texture = useTexture(user.avatar_url);
+  const delay = randomBetween(1.1, 2.2);
 
   return (
     <>
@@ -20,7 +22,7 @@ function AnimatedAvatar(user: UserInRoom) {
           transition: {
             repeat: Infinity,
             duration: 1,
-            repeatDelay: 5,
+            repeatDelay: 5 + delay,
             repeatType: "reverse",
           },
         }}
@@ -35,7 +37,7 @@ function AnimatedAvatar(user: UserInRoom) {
           transition={{
             repeat: Infinity,
             duration: 1,
-            repeatDelay: 5,
+            repeatDelay: 5 + delay,
             repeatType: "loop",
           }}
           map={texture}
