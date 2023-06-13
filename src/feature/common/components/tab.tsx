@@ -49,7 +49,7 @@ function Tab({ defaultActiveKey = "", items }: TabProps) {
               ...(item?.iconWrapperStyle || {}),
             }}
             key={index}
-            className="ml-[-1px] group w-10 h-10 relative p-2 border-x border-gray-950"
+            className="ml-[-1px] mb-[-1px] group w-10 h-10 relative p-2 border-x border-gray-950"
           >
             <button
               onClick={(e) => changeTab(item, e)}

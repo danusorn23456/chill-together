@@ -60,7 +60,7 @@ function Room({}: RoomProps) {
           <YoutubeScreen />
         </Screen>
       </div>
-      <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900">
+      <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900 z-20">
         <Tab defaultActiveKey="chat" items={tabItems} />
       </div>
     </div>
