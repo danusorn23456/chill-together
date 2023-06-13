@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "~/feature/common";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomState, usersInRoomState } from "~/feature/room";
 import { messagesState } from "../store";
 import {
@@ -16,7 +16,7 @@ function useChatListener() {
   const users = useRecoilValue(usersInRoomState);
   const chatChannel = useRef<RealtimeChannel>();
   const [, setMessages] = useRecoilState(messagesState);
-
+  const resetMessages = useResetRecoilState(messagesState);
   function handlePostgresChange(payload: any) {
     const sender = users.find((user) => user.id === payload.new.sender_id);
     setMessages((prev) => [
@@ -38,7 +38,7 @@ function useChatListener() {
   }
 
   async function handleLeave() {
-    setMessages([]);
+    resetMessages();
   }
 
   useEffect(
@@ -56,7 +56,7 @@ function useChatListener() {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!room?.id || !users) {
+      if (!room?.id) {
         return;
       }
 
@@ -77,8 +77,6 @@ function useChatListener() {
         handlePostgresChange
       );
 
-      channel.subscribe(handleSubscribe);
-
       channel.on(
         "presence",
         {
@@ -87,11 +85,13 @@ function useChatListener() {
         handleLeave
       );
 
+      channel.subscribe(handleSubscribe);
+
       return () => {
         channel.unsubscribe();
       };
     },
-    [room, users]
+    [room]
   );
 
   return null;

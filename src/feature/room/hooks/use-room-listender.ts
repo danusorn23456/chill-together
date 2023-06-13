@@ -3,7 +3,7 @@ import { supabase } from "~/feature/common";
 import { Channel } from "../type";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { usersInRoomState } from "../store/users-in-room";
-import { roomIdState, roomState, UsersInRoom } from "../store";
+import { roomState, UsersInRoom } from "../store";
 import { GetUserByIdResponseSuccess, userState } from "~/feature/auth";
 import { useRoomId } from ".";
 import { randomBetween } from "~/feature/common/utils";
@@ -15,13 +15,13 @@ import {
 } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
+import { getRoomById } from "../services";
 
 function useRoomListener() {
   const room_id = useRoomId();
   const user = useRecoilValue(userState);
   const [room, setRoom] = useRecoilState(roomState);
   const setUsersInRoom = useSetRecoilState(usersInRoomState);
-  const setRoomId = useSetRecoilState(roomIdState);
   const navigate = useNavigate();
   const usersChannel = useRef<RealtimeChannel>();
 
@@ -110,9 +110,13 @@ function useRoomListener() {
 
   useEffect(
     function performRoomId() {
-      if (room_id) {
-        setRoomId(room_id);
+      if (!room_id) return;
+      async function doAsync() {
+        const { data, error } = await getRoomById(room_id);
+        if (error) throw new Error(error.message);
+        setRoom(data);
       }
+      doAsync();
     },
     [room_id]
   );
@@ -140,7 +144,6 @@ function useRoomListener() {
       channel.subscribe(handleSubScribe);
 
       return () => {
-        setUsersInRoom([]);
         channel.unsubscribe();
       };
     },

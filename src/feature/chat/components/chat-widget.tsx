@@ -1,20 +1,20 @@
 import { FormEvent, useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useUser } from "~/feature/auth";
-import { roomIdState } from "~/feature/room";
 import { messagesState } from "../store";
 import { sendMessage } from "../services/send-message";
+import { useRoomId } from "~/feature/room";
 
 export type ChatWidgetSubmit = (message: string) => any;
 
 export interface ChatWidgetProps {}
 
 function ChatWidget({}: ChatWidgetProps) {
+  const roomId = useRoomId();
   const latestMessageId = "latest-message";
   const scrollWrapper = useRef<HTMLDivElement>(null);
 
   const user = useUser();
-  const roomId = useRecoilValue(roomIdState);
   const messages = useRecoilValue(messagesState);
 
   const inputRef = useRef<HTMLInputElement>(null);
