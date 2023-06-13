@@ -2,14 +2,16 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import { SignIn, Lobby, Room } from "pages";
 import { RouteGuard } from "./routes-guard";
 import { RoutePath } from "./type";
-import { RoomLayout } from "~/layouts";
+import { PublicLayout, RoomLayout } from "~/layouts";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <RouteGuard role="nonUser" redirect={RoutePath.LOBBY}>
-        <SignIn />
+        <PublicLayout>
+          <SignIn />
+        </PublicLayout>
       </RouteGuard>
     ),
   },

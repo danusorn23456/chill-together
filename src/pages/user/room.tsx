@@ -6,6 +6,7 @@ import {
 import { Screen } from "~/feature/animation";
 import { ChatWidget, useChatListener } from "~/feature/chat";
 import { Tab, TabItems } from "~/feature/common";
+import { YoutubeScreen, useMediaListener } from "~/feature/media";
 import { OnlineUserWidget, RoomBanner } from "~/feature/room";
 import { useRoomListener } from "~/feature/room";
 
@@ -15,6 +16,7 @@ function Room({}: RoomProps) {
   // perform realtime subscribe
   // main work of listener is to set state global state of each event
   const { leaveRoom } = useRoomListener();
+  useMediaListener();
   useChatListener();
 
   const tabItems: TabItems = [
@@ -46,7 +48,11 @@ function Room({}: RoomProps) {
   return (
     <div className="flex flex-1">
       <div className="flex-1 relative">
-        <Screen />
+        <Screen>
+          <div className="absolute-center w-full flex justify-center">
+            <YoutubeScreen />
+          </div>
+        </Screen>
       </div>
       <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900">
         <Tab defaultActiveKey="chat" items={tabItems} />

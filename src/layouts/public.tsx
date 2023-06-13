@@ -1,7 +1,13 @@
-export interface PublicLayoutProps {}
+import { ReactNode } from "react";
 
-function PublicLayout({ ...rest }: PublicLayoutProps) {
-  return <div {...rest}>PublicLayout</div>;
+export interface PublicLayoutProps {
+  children: ReactNode;
+}
+
+function PublicLayout({ children }: PublicLayoutProps) {
+  return (
+    <div className="w-full min-h-screen bg-gray-900 relative">{children}</div>
+  );
 }
 
 export { PublicLayout };

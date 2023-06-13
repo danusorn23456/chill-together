@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "~/feature/common";
 import { Channel } from "../type";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { usersInRoomState } from "../store/users-in-room";
 import { roomIdState, roomState, UsersInRoom } from "../store";
 import { GetUserByIdResponseSuccess, userState } from "~/feature/auth";
@@ -19,7 +19,7 @@ import { RoutePath } from "~/routes/type";
 function useRoomListener() {
   const room_id = useRoomId();
   const user = useRecoilValue(userState);
-  const room = useRecoilValue(roomState);
+  const [room, setRoom] = useRecoilState(roomState);
   const setUsersInRoom = useSetRecoilState(usersInRoomState);
   const setRoomId = useSetRecoilState(roomIdState);
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ function useRoomListener() {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!user || !room) return;
+      if (!user || !room || usersChannel.current) return;
 
       usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id, {
         config: {

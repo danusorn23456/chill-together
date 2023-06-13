@@ -9,8 +9,8 @@ export const roomIdState = atom<UUID | null>({
   default: null,
 });
 
-const roomState = selector<GetRoomByIdResponseSuccess>({
-  key: "roomState",
+const defaultRoomState = selector<GetRoomByIdResponseSuccess>({
+  key: "defaultRoomState",
   get: async ({ get }) => {
     const roomId = get(roomIdState);
 
@@ -24,6 +24,11 @@ const roomState = selector<GetRoomByIdResponseSuccess>({
 
     return room;
   },
+});
+
+const roomState = atom({
+  key: "roomState",
+  default: defaultRoomState,
 });
 
 export { roomState };

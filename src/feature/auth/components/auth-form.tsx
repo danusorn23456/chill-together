@@ -6,11 +6,15 @@ export interface AuthFormProps {}
 
 export function AuthForm({}: AuthFormProps) {
   return (
-    <div className="card w-full">
+    <div className="card bg-white w-full">
       <Auth
         supabaseClient={supabase}
-        appearance={{ theme: ThemeSupa }}
-        theme="dark"
+        appearance={{
+          theme: ThemeSupa,
+          style: {
+            button: { color: "gray" },
+          },
+        }}
         providers={["google"]}
       />
     </div>

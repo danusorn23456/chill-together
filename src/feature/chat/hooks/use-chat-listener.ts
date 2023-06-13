@@ -1,25 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { supabase } from "~/feature/common";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "~/feature/auth";
-import { roomState } from "~/feature/room";
+import { roomState, usersInRoomState } from "~/feature/room";
 import { messagesState } from "../store";
 import {
   REALTIME_SUBSCRIBE_STATES,
+  RealtimeChannel,
   RealtimePostgresChangesFilter,
 } from "@supabase/supabase-js";
+import { Channel } from "~/feature/room/type";
 
 function useChatListener() {
   const room = useRecoilValue(roomState);
-  const user = useRecoilValue(userState);
+  const users = useRecoilValue(usersInRoomState);
+  const chatChannel = useRef<RealtimeChannel>();
   const [, setMessages] = useRecoilState(messagesState);
 
   function handlePostgresChange(payload: any) {
+    const sender = users.find((user) => user.id === payload.new.sender_id);
     setMessages((prev) => [
       ...(prev || []),
       {
         ...payload.new,
-        sender: user,
+        sender,
       },
     ]);
   }
@@ -35,7 +38,7 @@ function useChatListener() {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!room?.id) {
+      if (!room?.id || !users) {
         return;
       }
 
@@ -46,7 +49,9 @@ function useChatListener() {
         filter: `room_id=eq.${room.id}`,
       } as RealtimePostgresChangesFilter<"INSERT">;
 
-      const channel = supabase.channel("db-messages-" + room.id);
+      chatChannel.current = supabase.channel(Channel.ROOM_MESSAGES + room.id);
+
+      const channel = chatChannel.current;
 
       channel.on(
         "postgres_changes",
@@ -60,7 +65,7 @@ function useChatListener() {
         channel.unsubscribe();
       };
     },
-    [room]
+    [room, users]
   );
 
   return null;

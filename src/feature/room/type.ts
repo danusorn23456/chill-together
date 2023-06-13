@@ -19,4 +19,5 @@ export type RoomMessages = RoomMessage[];
 export enum Channel {
   ONLINE_USERS = "online-users-channel-",
   ROOM_MESSAGES = "room-messages-channel-",
+  ROOM_MEDIA = "room-media-channel-",
 }

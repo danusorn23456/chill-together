@@ -8,6 +8,6 @@ export async function sendMessage({
   return await supabase.rpc("send_message", { room_id, sender_id, message });
 }
 
-export type sendMessageResponse = Awaited<ReturnType<typeof sendMessage>>;
-export type sendMessageResponseSuccess = sendMessageResponse["data"];
-export type sendMessageResponseError = sendMessageResponse["error"];
+export type SendMessageResponse = Awaited<ReturnType<typeof sendMessage>>;
+export type SendMessageResponseSuccess = SendMessageResponse["data"];
+export type SendMessageResponseError = SendMessageResponse["error"];
