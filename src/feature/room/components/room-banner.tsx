@@ -1,14 +1,8 @@
 import { useRecoilValue } from "recoil";
 import { roomState } from "..";
-import { useNavigate } from "react-router-dom";
-import { RoutePath } from "~/routes/type";
 
 function RoomBanner() {
   const room = useRecoilValue(roomState);
-  const navigate = useNavigate();
-  function leaveRoom() {
-    navigate(RoutePath.LOBBY);
-  }
 
   return (
     <div className="flex flex-col items-start p-4 flex-shrink-0 relative">

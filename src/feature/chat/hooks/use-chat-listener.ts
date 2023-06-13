@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { supabase } from "~/feature/common";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomState, usersInRoomState } from "~/feature/room";
