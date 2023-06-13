@@ -52,6 +52,7 @@ function useRoomListener() {
       return dateA.getTime() - dateB.getTime();
     });
 
+    console.info(usersInRoom);
     setUsersInRoom(usersInRoom);
   }
 
@@ -123,15 +124,9 @@ function useRoomListener() {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!user || !room) return;
+      if (!room) return;
 
-      usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id, {
-        config: {
-          presence: {
-            key: user!.id,
-          },
-        },
-      });
+      usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id);
 
       const channel = usersChannel.current;
 
@@ -147,7 +142,7 @@ function useRoomListener() {
         channel.unsubscribe();
       };
     },
-    [room, user]
+    [room]
   );
 
   return { leaveRoom };

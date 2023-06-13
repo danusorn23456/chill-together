@@ -8,22 +8,26 @@ export interface AnimatedAvatarProps {}
 function AnimatedAvatar(user: UserInRoom) {
   const [x, y, z] = user.coordinates;
   const texture = useTexture(user.avatar_url);
-  const delay = randomBetween(1.1, 2.2);
+  const delay = randomBetween(0.1, 0.5);
+  const delayBeforeJump = 3;
 
   return (
     <>
       <motion.sprite
-        whileHover={{
-          scale: 1.2,
-        }}
         position={[x, y, z]}
         animate={{
-          y: [y, y + 1, y],
+          scaleX: 0.95,
+          y: [y, y + 0.6, y],
           transition: {
             repeat: Infinity,
             duration: 1,
-            repeatDelay: 5 + delay,
+            repeatDelay: delayBeforeJump + delay,
             repeatType: "reverse",
+            scaleX: {
+              repeat: Infinity,
+              duration: 0.3,
+              repeatType: "reverse",
+            },
           },
         }}
       >
@@ -37,7 +41,7 @@ function AnimatedAvatar(user: UserInRoom) {
           transition={{
             repeat: Infinity,
             duration: 1,
-            repeatDelay: 5 + delay,
+            repeatDelay: delayBeforeJump + delay,
             repeatType: "loop",
           }}
           map={texture}
