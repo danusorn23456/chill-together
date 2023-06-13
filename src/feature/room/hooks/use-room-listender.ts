@@ -119,7 +119,7 @@ function useRoomListener() {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!user || !room || usersChannel.current) return;
+      if (!user || !room) return;
 
       usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id, {
         config: {
@@ -142,7 +142,6 @@ function useRoomListener() {
       return () => {
         setUsersInRoom([]);
         channel.unsubscribe();
-        channel.untrack();
       };
     },
     [room, user]

@@ -3,11 +3,19 @@ import {
   ChatBubbleLeftEllipsisIcon,
   UserCircleIcon,
 } from "@heroicons/react/20/solid";
+import { Suspense } from "react";
+import { useRecoilValue } from "recoil";
 import { Screen } from "~/feature/animation";
+import { userState } from "~/feature/auth";
 import { ChatWidget, useChatListener } from "~/feature/chat";
 import { Tab, TabItems } from "~/feature/common";
-import { YoutubeScreen, useMediaListener } from "~/feature/media";
-import { OnlineUserWidget, RoomBanner } from "~/feature/room";
+import { YoutubeScreen, musicState, useMediaListener } from "~/feature/media";
+import {
+  OnlineUserWidget,
+  RoomBanner,
+  roomState,
+  usersInRoomState,
+} from "~/feature/room";
 import { useRoomListener } from "~/feature/room";
 
 export interface RoomProps {}
@@ -49,9 +57,7 @@ function Room({}: RoomProps) {
     <div className="flex flex-1">
       <div className="flex-1 relative">
         <Screen>
-          <div className="absolute-center w-full flex justify-center">
-            <YoutubeScreen />
-          </div>
+          <YoutubeScreen />
         </Screen>
       </div>
       <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900">

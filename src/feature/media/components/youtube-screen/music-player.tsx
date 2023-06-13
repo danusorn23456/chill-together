@@ -5,10 +5,13 @@ import { YouTubePlayer as YouTubeType } from "youtube-player/dist/types";
 import { difTimeInSecond, toHoursAndMinutes } from "~/feature/common";
 import { roomState } from "~/feature/room";
 import { endPlaylist, musicState } from "../..";
+import { PlayCircleIcon, StopCircleIcon } from "@heroicons/react/20/solid";
 
-export interface MusicPlayerProps {}
+export interface MusicPlayerProps {
+  isOwner: boolean;
+}
 
-function MusicPlayer({}: MusicPlayerProps) {
+function MusicPlayer({ isOwner }: MusicPlayerProps) {
   const room = useRecoilValue(roomState);
   const music = useRecoilValue(musicState);
 
@@ -71,23 +74,30 @@ function MusicPlayer({}: MusicPlayerProps) {
   );
 
   return (
-    <>
-      <div className="w-full h-full flex flex-col justify-center items-center top-0 left-0 overflow-visible">
-        <div
-          id="youtube-player"
-          className="w-full h-full pointer-events-none"
-        />
-        <div className="bg-gray-950 w-fit text-center z-10">
-          <p ref={durationNodeRef} className="text-white"></p>
-          <button className="text-white px-2" onClick={handleEndMusic}>
-            stop
-          </button>
-          <button className="text-white px-2" onClick={handlePlay}>
-            play
-          </button>
+    <div className="w-full h-64 flex flex-col justify-center items-center">
+      <div id="youtube-player" className="w-full h-full pointer-events-none" />
+      <div className="text-center z-10 absolute top-full w-full p-2">
+        <p ref={durationNodeRef} className="text-white sr-only"></p>
+        <div className="flex space-x-1">
+          {isOwner && (
+            <div className="relative">
+              <StopCircleIcon className="w-8 h-8 text-white" />
+              <button
+                className="text-white px-2 absolute top-0 left-0 w-full h-full z-10"
+                onClick={handleEndMusic}
+              ></button>
+            </div>
+          )}
+          <div className="relative">
+            <PlayCircleIcon className="w-8 h-8 text-white"></PlayCircleIcon>
+            <button
+              className="text-white px-2 absolute top-0 left-0 w-full h-full z-10"
+              onClick={handlePlay}
+            />
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

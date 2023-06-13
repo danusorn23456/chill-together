@@ -7,8 +7,8 @@ export const userIdState = atom<string | null>({
   default: null,
 });
 
-export const userState = selector<GetUserByIdResponseSuccess>({
-  key: "userState",
+export const defaultUserState = selector<GetUserByIdResponseSuccess>({
+  key: "defaultUserState",
   get: async ({ get }) => {
     const userID = get(userIdState);
 
@@ -24,4 +24,9 @@ export const userState = selector<GetUserByIdResponseSuccess>({
 
     return user;
   },
+});
+
+export const userState = atom<GetUserByIdResponseSuccess>({
+  key: "userState",
+  default: defaultUserState,
 });

@@ -8,10 +8,10 @@ import "~/feature/common/styles/css/index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <RecoilRoot>
-    <AuthProvider>
-      <Suspense fallback={<div></div>}>
+    <Suspense fallback={<div></div>}>
+      <AuthProvider>
         <RouterProvider router={router}></RouterProvider>
-      </Suspense>
-    </AuthProvider>
+      </AuthProvider>
+    </Suspense>
   </RecoilRoot>
 );

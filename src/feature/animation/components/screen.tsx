@@ -22,8 +22,7 @@ function Screen({ children }: ScreenProps) {
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
-      />
-      {children}
+      ></div>
       <div className="absolute bottom-0 left-0 w-full h-1/3">
         <Canvas>
           <perspectiveCamera position={[0, 0, 1.5]}>
@@ -33,6 +32,7 @@ function Screen({ children }: ScreenProps) {
           </perspectiveCamera>
         </Canvas>
       </div>
+      {children}
     </div>
   );
 }

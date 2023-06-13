@@ -29,6 +29,10 @@ function useMediaListener() {
     }
   }
 
+  async function handleLeave() {
+    setMusic(null);
+  }
+
   useEffect(
     function performRealtimeSubscribe() {
       if (!room) return;
@@ -48,6 +52,14 @@ function useMediaListener() {
         "postgres_changes",
         postgresChangesFilter,
         handlePostgresChange
+      );
+
+      channel.on(
+        "presence",
+        {
+          event: "leave",
+        },
+        handleLeave
       );
 
       channel.subscribe(handleSubscribe);
