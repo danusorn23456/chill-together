@@ -9,6 +9,7 @@ import {
   RealtimePostgresChangesFilter,
 } from "@supabase/supabase-js";
 import { Channel } from "~/feature/room/type";
+import { getMessagesByRoomId } from "..";
 
 function useChatListener() {
   const room = useRecoilValue(roomState);
@@ -39,6 +40,19 @@ function useChatListener() {
   async function handleLeave() {
     setMessages([]);
   }
+
+  useEffect(
+    function intialMessages() {
+      if (!room) return;
+      async function doAsync() {
+        const { data, error } = await getMessagesByRoomId(room!.id);
+        if (error) throw new Error(error.message);
+        setMessages(data);
+      }
+      doAsync();
+    },
+    [room]
+  );
 
   useEffect(
     function performRealtimeSubscribe() {

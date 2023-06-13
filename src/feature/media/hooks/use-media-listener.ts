@@ -9,6 +9,7 @@ import { supabase } from "~/feature/common";
 import { roomState } from "~/feature/room";
 import { Channel } from "~/feature/room";
 import { GetPlayedPlaylistResponseSuccess, musicState } from "..";
+import { getPlayedPlaylist } from "..";
 
 function useMediaListener() {
   const room = useRecoilValue(roomState);
@@ -32,6 +33,18 @@ function useMediaListener() {
   async function handleLeave() {
     setMusic(null);
   }
+
+  useEffect(() => {
+    if (!room) return;
+    async function doAsync() {
+      const { data, error } = await getPlayedPlaylist({ room_id: room!.id });
+      if (error) {
+        throw new Error(error.message);
+      }
+      setMusic(data);
+    }
+    doAsync();
+  }, [room]);
 
   useEffect(
     function performRealtimeSubscribe() {
@@ -65,6 +78,7 @@ function useMediaListener() {
       channel.subscribe(handleSubscribe);
 
       return () => {
+        channel.untrack();
         channel.unsubscribe();
       };
     },

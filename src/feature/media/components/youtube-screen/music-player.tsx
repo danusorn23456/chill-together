@@ -74,8 +74,11 @@ function MusicPlayer({ isOwner }: MusicPlayerProps) {
   );
 
   return (
-    <div className="w-full h-64 flex flex-col justify-center items-center">
-      <div id="youtube-player" className="w-full h-full pointer-events-none" />
+    <div className="h-full w-full flex flex-col justify-center items-center">
+      <div
+        id="youtube-player"
+        className="w-full h-full pointer-events-none rounded-md overflow-hidden"
+      />
       <div className="text-center z-10 absolute top-full w-full p-2">
         <p ref={durationNodeRef} className="text-white sr-only"></p>
         <div className="flex space-x-1">

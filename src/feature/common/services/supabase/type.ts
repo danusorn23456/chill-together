@@ -16,6 +16,7 @@ export interface Database {
           id: string
           played_at: string | null
           playlist_id: string | null
+          playlist_title: string | null
           room_id: string
         }
         Insert: {
@@ -24,6 +25,7 @@ export interface Database {
           id?: string
           played_at?: string | null
           playlist_id?: string | null
+          playlist_title?: string | null
           room_id: string
         }
         Update: {
@@ -32,6 +34,7 @@ export interface Database {
           id?: string
           played_at?: string | null
           playlist_id?: string | null
+          playlist_title?: string | null
           room_id?: string
         }
         Relationships: [
@@ -200,11 +203,17 @@ export interface Database {
         }
         Returns: Database["public"]["CompositeTypes"]["get_messages_by_room_id_type"][]
       }
+      get_music_by_title: {
+        Args: {
+          title: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["get_playlist_type"]
+      }
       get_played_playlist: {
         Args: {
           room_id: string
         }
-        Returns: Database["public"]["CompositeTypes"]["listen_to_playlist_type"]
+        Returns: Database["public"]["CompositeTypes"]["get_played_playlist_type"]
       }
       get_playlist: {
         Args: {
@@ -212,12 +221,6 @@ export interface Database {
           per_page: number
         }
         Returns: Database["public"]["CompositeTypes"]["get_playlist_type"][]
-      }
-      get_playlist_by_title: {
-        Args: {
-          title: string
-        }
-        Returns: Database["public"]["CompositeTypes"]["get_playlist_type"]
       }
       get_room_by_id: {
         Args: {
@@ -239,7 +242,7 @@ export interface Database {
         Args: {
           playlist_id: string
         }
-        Returns: Database["public"]["CompositeTypes"]["listen_to_playlist_type"]
+        Returns: undefined
       }
       send_message: {
         Args: {
@@ -274,6 +277,12 @@ export interface Database {
         sender_id: string
         created_at: string
         sender: Database["public"]["CompositeTypes"]["sender_type"]
+      }
+      get_played_playlist_type: {
+        id: string
+        playlist_title: string
+        playlist_id: string
+        played_at: string
       }
       get_playlist_type: {
         id: string
@@ -315,11 +324,6 @@ export interface Database {
         email: string
         created_at: string
         updated_at: string
-      }
-      listen_to_playlist_type: {
-        id: string
-        playlist_id: string
-        played_at: string
       }
       message_type: {
         id: string

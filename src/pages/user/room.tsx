@@ -54,13 +54,13 @@ function Room({}: RoomProps) {
   ];
 
   return (
-    <div className="flex flex-1">
-      <div className="flex-1 relative">
+    <div className="flex flex-col md:flex-row flex-1">
+      <div className="flex-1 md:flex-2 relative">
         <Screen>
           <YoutubeScreen />
         </Screen>
       </div>
-      <div className="w-60 lg:w-96 flex flex-col overflow-hidden bg-gray-900 z-20">
+      <div className="flex-1 md:flex-initial md:w-96 flex flex-col overflow-hidden bg-gray-900 z-20">
         <Tab defaultActiveKey="chat" items={tabItems} />
       </div>
     </div>

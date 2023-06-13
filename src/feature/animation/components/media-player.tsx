@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface MedaiPlayerProps {}
 
 function MedaiPlayer({ ...rest }: MedaiPlayerProps) {

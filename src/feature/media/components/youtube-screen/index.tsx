@@ -1,10 +1,11 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { MusicsList } from "./music-lists";
 import { MusicPlayer } from "./music-player";
 import { musicState } from "../..";
 import { roomState } from "~/feature/room";
 import { userState } from "~/feature/auth";
-import { MusicWait } from "./music-wait";
+import { layoutState } from "~/layouts";
+import { useEffect } from "react";
 
 export interface YoutubeScreenProps {}
 
@@ -12,21 +13,31 @@ function YoutubeScreen({ ...rest }: YoutubeScreenProps) {
   const music = useRecoilValue(musicState);
   const room = useRecoilValue(roomState);
   const user = useRecoilValue(userState);
+  const [, setLayout] = useRecoilState(layoutState);
 
   const isOwner = user?.id === room?.owner.id;
 
+  useEffect(() => {
+    const title =
+      (music?.playlist_title && `🎶 ${music?.playlist_title}`) ||
+      "...waiting for some music";
+    setLayout((prev) => ({ ...prev, title }));
+  }, [music]);
+
   return (
-    <div className="absolute-center">
+    <div className="absolute-center w-full h-full flex justify-center items-center">
       <div
         {...rest}
-        className="w-full h-64 sm:max-w-lg aspect-video rounded relative z-20"
+        className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-2 aspect-video relative z-20 bg-gray-900 flex items-center rounded-md"
       >
         {/* <input className="input" onChange={handleChange} /> */}
         {!music?.playlist_id ? (
           isOwner ? (
             <MusicsList />
           ) : (
-            <MusicWait />
+            <h2 className="text-white text-center text-xs mx-auto sm:text-sm">
+              WAITING FOR ROOM OWNER PLAY SOME MUSIC . . .
+            </h2>
           )
         ) : (
           <MusicPlayer isOwner={isOwner} />
