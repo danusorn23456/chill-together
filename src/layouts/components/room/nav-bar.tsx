@@ -18,7 +18,7 @@ function NavBar({}: NavBarProps) {
           <></>
         )}
       </div>
-      <div className="ml-auto w-60 lg:w-96"></div>
+      <div className="w-0 ml-auto lg:w-96"></div>
     </div>
   );
 }
