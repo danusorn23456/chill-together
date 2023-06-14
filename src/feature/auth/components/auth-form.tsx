@@ -21,6 +21,7 @@ export function AuthForm() {
             button: { color: "gray" },
           },
         }}
+        providers={[]}
       />
     </div>
   );
