@@ -151,3 +151,14 @@ send selected playlist information to <span style="color:orange">data table medi
 <sub>
 send message to <span style="color:orange">data table messages by room id</span> so after that when database change useMessagesListener() will trigger so new messages will get render
 </sub>
+
+## Feature Develop Guide
+
+<sub>
+when creating a new component, it is important to consider its primary function and determine the appropriate category. Sometimes, a component may fit into multiple categories, but it should align with its main purpose. For example, an animation that plays on the playlist screen can initially be categorized under the playlist feature. However, if the animation becomes more complex, requiring additional functionality or maintenance, it is advisable to separate it from the playlist feature and create a separate category for animations.
+</sub>
+<br>
+<br>
+<sub>
+ui component should primarily focus on rendering the content provided through props. It is acceptable to pass some props to a depth of 1 or 2 levels, but the goal is to create pure function components. The data handling functions should be placed in the page component, and the resulting data should be passed to the feature component as props. This approach ensures that we can trace the origin of all data back to the page component.
+</sub>
