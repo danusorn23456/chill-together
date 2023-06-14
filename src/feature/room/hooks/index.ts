@@ -1,3 +1,3 @@
 export * from "./use-room-listender";
-export * from "./use-rooms";
+export * from "./use-lobby";
 export * from "./use-room-id";

@@ -1,26 +1,21 @@
 import { FormEvent, useEffect, useRef } from "react";
-import { useRecoilValue } from "recoil";
-import { useUser } from "~/feature/auth";
-import { messagesState } from "../store";
-import { sendMessage } from "../services/send-message";
-import { useRoomId } from "~/feature/room";
+import { GetMessagesByRoomIdResponseSuccess } from "..";
 
 export type ChatWidgetSubmit = (message: string) => any;
 
-export interface ChatWidgetProps {}
+export interface ChatWidgetProps {
+  messages: GetMessagesByRoomIdResponseSuccess;
+  onSend?: (message: string) => Promise<any>;
+}
 
 /**
  * This is a TypeScript React component for a chat widget that allows users to send and receive
  * messages in a chat room. use global `messageState`
  *
  */
-function ChatWidget({}: ChatWidgetProps) {
-  const roomId = useRoomId();
+function ChatWidget({ messages, onSend }: ChatWidgetProps) {
   const latestMessageId = "latest-message";
   const scrollWrapper = useRef<HTMLDivElement>(null);
-
-  const user = useUser();
-  const messages = useRecoilValue(messagesState);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,23 +26,12 @@ function ChatWidget({}: ChatWidgetProps) {
 
     if (!message) return console.log("message not found");
 
-    const { error } = await sendMessage({
-      message: message,
-      room_id: roomId!,
-      sender_id: user!.id,
-    });
-
-    console.log(
-      `%c ${error ? "failed" : "success"} to send message`,
-      "background:green;color:white;padding:4px;"
-    );
-
-    form.reset();
+    (await onSend?.(message)) && form.reset();
   }
 
   useEffect(
     function scrollToLastMessage() {
-      if (!messages || !user || !scrollWrapper.current) return;
+      if (!messages || !scrollWrapper.current) return;
       const { scrollTop, scrollHeight, clientHeight } = scrollWrapper.current;
       const maxScrollTop = scrollHeight - clientHeight;
       const latestMessageNode = document.getElementById(
@@ -59,7 +43,7 @@ function ChatWidget({}: ChatWidgetProps) {
         latestMessageNode.scrollIntoView({ behavior: "smooth" });
       }
     },
-    [messages, user]
+    [messages]
   );
 
   return (

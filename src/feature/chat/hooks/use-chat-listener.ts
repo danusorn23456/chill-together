@@ -1,15 +1,20 @@
-import { useEffect, useRef } from "react";
-import { supabase } from "~/feature/common";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { roomState, usersInRoomState } from "~/feature/room";
+import { useEffect, useRef, useState } from "react";
+import { Channel, supabase } from "~/feature/common";
+import { useResetRecoilState } from "recoil";
+import { OnlineUsers } from "~/feature/room";
 import { messagesState } from "../store";
 import {
   REALTIME_SUBSCRIBE_STATES,
   RealtimeChannel,
   RealtimePostgresChangesFilter,
 } from "@supabase/supabase-js";
-import { Channel } from "~/feature/room/type";
-import { getMessagesByRoomId } from "..";
+import {
+  GetMessagesByRoomIdResponseSuccess,
+  getMessagesByRoomId,
+  sendMessage as sendMessageAPI,
+} from "..";
+import { GetUserByIdResponseSuccess } from "~/feature/auth";
+import { GetRoomByIdResponseSuccess } from "~/feature/room/services";
 
 /**
  * The `useChatListener` function sets up a real-time chat listener using Supabase to listen for
@@ -17,15 +22,35 @@ import { getMessagesByRoomId } from "..";
  * @returns null is being returned.
  */
 
-function useChatListener() {
-  const room = useRecoilValue(roomState);
-  const users = useRecoilValue(usersInRoomState);
+export interface UseChatListenerProps {
+  room?: GetRoomByIdResponseSuccess;
+  user?: GetUserByIdResponseSuccess;
+  users?: OnlineUsers;
+}
+
+function useChatListener({ room, user, users }: UseChatListenerProps) {
+  const [loading, setLoading] = useState(true);
   const chatChannel = useRef<RealtimeChannel>();
-  const [, setMessages] = useRecoilState(messagesState);
+  const [messages, setMessages] = useState<GetMessagesByRoomIdResponseSuccess>(
+    []
+  );
+
+  async function sendMessage(message: string) {
+    const { error } = await sendMessageAPI({
+      message: message,
+      room_id: room!.id,
+      sender_id: user!.id,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return "success";
+  }
+
   const resetMessages = useResetRecoilState(messagesState);
 
   function handlePostgresChange(payload: any) {
-    const sender = users.find((user) => user.id === payload.new.sender_id);
+    const sender = users!.find((user) => user.id === payload.new.sender_id);
     setMessages((prev) => [
       ...(prev || []),
       {
@@ -50,33 +75,34 @@ function useChatListener() {
 
   useEffect(
     function intialMessages() {
-      if (!room) return;
+      if (!room?.id) return;
       async function doAsync() {
         const { data, error } = await getMessagesByRoomId(room!.id);
         if (error) throw new Error(error.message);
         setMessages(data);
       }
       doAsync();
+      setLoading(false);
     },
     [room]
   );
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!room?.id || !users) {
+      if (!room?.id || !user?.id) {
         return;
       }
+
+      chatChannel.current = supabase.channel(Channel.ROOM_MESSAGES + room!.id);
+
+      const channel = chatChannel.current;
 
       const postgresChangesFilter = {
         event: "INSERT",
         schema: "public",
         table: "messages",
-        filter: `room_id=eq.${room.id}`,
+        filter: `room_id=eq.${room!.id}`,
       } as RealtimePostgresChangesFilter<"INSERT">;
-
-      chatChannel.current = supabase.channel(Channel.ROOM_MESSAGES + room.id);
-
-      const channel = chatChannel.current;
 
       channel.on(
         "postgres_changes",
@@ -101,7 +127,7 @@ function useChatListener() {
     [room, users]
   );
 
-  return null;
+  return { loading, messages, sendMessage };
 }
 
 export { useChatListener };

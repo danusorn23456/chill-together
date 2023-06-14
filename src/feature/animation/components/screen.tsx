@@ -1,17 +1,14 @@
 import { Canvas } from "@react-three/fiber";
-import { AnimatedAvatar } from ".";
-import { useRecoilValue } from "recoil";
-import { usersInRoomState } from "~/feature/room/store";
 import backgroundSource from "~/feature/common/assets/bg.jpg";
 import { ReactNode } from "react";
+import { AbsoluteCenter } from "~/feature/common";
 
 export interface ScreenProps {
   children?: ReactNode;
+  render?: ReactNode;
 }
 
-function Screen({ children }: ScreenProps) {
-  const users = useRecoilValue(usersInRoomState);
-
+const Screen = ({ children, render }: ScreenProps) => {
   return (
     <div className="w-full h-full relative">
       <div
@@ -25,16 +22,12 @@ function Screen({ children }: ScreenProps) {
       ></div>
       <div className="absolute bottom-0 left-0 w-full h-1/3">
         <Canvas>
-          <perspectiveCamera position={[0, 0, 1.5]}>
-            {users.map((user) => (
-              <AnimatedAvatar key={user.id} {...user} />
-            ))}
-          </perspectiveCamera>
+          <perspectiveCamera position={[0, 0, 1.5]}>{render}</perspectiveCamera>
         </Canvas>
       </div>
-      {children}
+      <AbsoluteCenter>{children}</AbsoluteCenter>
     </div>
   );
-}
+};
 
 export { Screen };

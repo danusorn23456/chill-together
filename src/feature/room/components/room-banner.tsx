@@ -1,5 +1,4 @@
-import { useRecoilValue } from "recoil";
-import { roomState } from "..";
+import { GetRoomByIdResponseSuccess } from "../services";
 
 /**
  * This is a React component that displays a banner for a room, including the room name, description,
@@ -8,9 +7,12 @@ import { roomState } from "..";
  * includes the room name, description, and the avatar of the room owner. The room data is obtained
  * using the useRecoilValue hook from the roomState atom.
  */
-function RoomBanner() {
-  const room = useRecoilValue(roomState);
 
+export interface RoomBannerProps {
+  room?: GetRoomByIdResponseSuccess;
+}
+
+function RoomBanner({ room }: RoomBannerProps) {
   return (
     <div className="flex flex-col items-start p-4 flex-shrink-0 relative">
       <div className="z-10 absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black to-transparent"></div>

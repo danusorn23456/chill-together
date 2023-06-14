@@ -1,4 +1,2 @@
-export * from "./room";
-export * from "./public";
-export * from "./lobby";
+export * from "./components";
 export * from "./store";

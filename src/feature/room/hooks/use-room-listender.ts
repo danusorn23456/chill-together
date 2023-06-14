@@ -1,11 +1,6 @@
-import { useEffect, useRef } from "react";
-import { supabase } from "~/feature/common";
-import { Channel } from "../type";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { usersInRoomState } from "../store/users-in-room";
-import { roomState, UsersInRoom } from "../store";
-import { GetUserByIdResponseSuccess, userState } from "~/feature/auth";
-import { useRoomId } from ".";
+import { useEffect, useRef, useState } from "react";
+import { Channel, supabase } from "~/feature/common";
+import { GetUserByIdResponseSuccess } from "~/feature/auth";
 import { randomBetween } from "~/feature/common/utils";
 import {
   REALTIME_SUBSCRIBE_STATES,
@@ -15,18 +10,31 @@ import {
 } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "~/routes/type";
-import { getRoomById } from "../services";
+import { GetRoomByIdResponseSuccess, getRoomById } from "../services";
+import { sortBy } from "lodash";
 
+export type OnlineUser = GetUserByIdResponseSuccess & {
+  coordinates: number[];
+  is_owner: boolean;
+};
+
+export type OnlineUsers = OnlineUser[];
 /**
  * The `useRoomListener` function sets up a real-time subscription to a Supabase channel for online
  * users in a specific room and handles various events related to user presence in the room.
  * @returns An object with a `leaveRoom` function.
  */
-function useRoomListener() {
-  const room_id = useRoomId();
-  const user = useRecoilValue(userState);
-  const [room, setRoom] = useRecoilState(roomState);
-  const setUsersInRoom = useSetRecoilState(usersInRoomState);
+
+export interface UseRoomListenerProps {
+  roomId: string;
+  user?: GetUserByIdResponseSuccess;
+}
+
+function useRoomListener({ roomId, user }: UseRoomListenerProps) {
+  const [loading, setLoading] = useState(true);
+
+  const [room, setRoom] = useState<GetRoomByIdResponseSuccess>();
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUsers>();
   const navigate = useNavigate();
   const usersChannel = useRef<RealtimeChannel>();
 
@@ -37,27 +45,27 @@ function useRoomListener() {
   function handleSync() {
     let usersInRoom = Object.values(usersChannel!.current!.presenceState()).map(
       (i) => i[0]
-    ) as unknown as UsersInRoom;
+    ) as unknown as OnlineUsers;
+
+    usersInRoom.map((user) => ({
+      ...user,
+      is_owner: user.id === room?.owner.id,
+    }));
 
     console.log(
       `%c online users ${usersInRoom.length}`,
       "background:royalblue;color:white;padding:4px;"
     );
 
-    usersInRoom = usersInRoom.sort((a, b) => {
-      if (a.is_owner && !b.is_owner) {
-        return -1; // a should come before b
-      } else if (!a.is_owner && b.is_owner) {
-        return 1; // a should come after b
+    usersInRoom = sortBy(usersInRoom, (user) => {
+      if (user.is_owner) {
+        return -Infinity;
       }
 
-      const dateA = new Date(a.online_at);
-      const dateB = new Date(b.online_at);
-
-      return dateA.getTime() - dateB.getTime();
+      return new Date(user.created_at).getTime();
     });
 
-    setUsersInRoom(usersInRoom);
+    setOnlineUsers(usersInRoom);
   }
 
   function handleJoin({
@@ -89,7 +97,7 @@ function useRoomListener() {
 
     if (status === "SUBSCRIBED") {
       const generateXPosition = randomBetween(3, -3);
-      const generateYPosition = randomBetween(-1, -2);
+      const generateYPosition = randomBetween(-1.5, 0);
 
       await channel!.track({
         is_owner: room?.created_by === user!.id,
@@ -115,22 +123,23 @@ function useRoomListener() {
 
   useEffect(
     function performRoomId() {
-      if (!room_id) return;
+      if (!roomId) return;
       async function doAsync() {
-        const { data, error } = await getRoomById(room_id);
+        const { data, error } = await getRoomById(roomId);
         if (error) throw new Error(error.message);
         setRoom(data);
+        setLoading(false);
       }
       doAsync();
     },
-    [room_id]
+    [roomId]
   );
 
   useEffect(
     function performRealtimeSubscribe() {
       if (!room) return;
 
-      usersChannel.current = supabase.channel(Channel.ONLINE_USERS + room_id);
+      usersChannel.current = supabase.channel(Channel.ROOM_USERS + roomId);
 
       const channel = usersChannel.current;
 
@@ -149,7 +158,7 @@ function useRoomListener() {
     [room]
   );
 
-  return { leaveRoom };
+  return { loading, room, onlineUsers, leaveRoom };
 }
 
 export { useRoomListener };

@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { userState } from "~/feature/auth";
-import { RoomDescriptions, useRooms } from "~/feature/room";
+import { RoomDescriptions, useLobby } from "~/feature/room";
 
 /** This is a functional component called `Lobby` that renders a list of available rooms for users to
 join. It uses the `useRooms` hook to get the list of rooms and the `useRecoilValue` hook to get the
@@ -10,18 +10,18 @@ component. The `join` function is passed as a callback to the `onClick` event of
 `RoomDescriptions` component, allowing users to join a room by clicking on it. */
 
 function Lobby() {
-  const { rooms, join } = useRooms();
   const user = useRecoilValue(userState);
-  const otherRooms = rooms?.filter((room) => room.owner.id !== user?.id);
-  let myRoom = rooms?.find((room) => room.owner.id === user?.id);
+  const { loading, otherRooms, myRoom, join } = useLobby({ user });
+
+  if (loading) {
+    return (
+      <div className="pt-14 bg-gray-950 h-full w-full flex flex-col justify-start items-center space-y-4 p-4" />
+    );
+  }
 
   return (
     <div className="pt-14 bg-gray-950 h-full w-full flex flex-col justify-start items-center space-y-4 p-4">
-      {myRoom ? (
-        <RoomDescriptions isMe room={myRoom} onClick={() => join(myRoom!.id)} />
-      ) : (
-        <></>
-      )}
+      <RoomDescriptions isMe room={myRoom!} onClick={() => join(myRoom!.id)} />
       {otherRooms?.map((room) => (
         <RoomDescriptions
           key={room.id}

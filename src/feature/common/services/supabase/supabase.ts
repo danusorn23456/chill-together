@@ -12,3 +12,9 @@ export const supabase = createClient<Database, "public">(
     },
   }
 );
+
+export enum Channel {
+  ROOM_USERS = "room-users-channel-",
+  ROOM_MESSAGES = "room-messages-channel-",
+  ROOM_PLAYLIST = "room-media-channel-",
+}
