@@ -9,9 +9,11 @@ function NavBar({}: NavBarProps) {
   }
   return (
     <div className="fixed z-10 flex w-full bg-gray-900 h-10 border-b border-gray-950">
-      <div className="relative flex justify-between w-full">
-        <div className="flex-1"></div>
-        <div className="flex-1 flex justify-end">
+      <div className="relative flex justify-between w-full items-center">
+        <div className="flex-1 uppercase p-2">
+          <h2 className="text-white tracking-wide">lobby</h2>
+        </div>
+        <div className="flex-1 flex justify-end relative">
           <ArrowLeftOnRectangleIcon className="ml-auto fill-red-500 w-10 h-10 p-2" />
           <button
             onClick={handleSignout}

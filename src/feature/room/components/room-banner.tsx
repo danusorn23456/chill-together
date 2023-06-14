@@ -14,7 +14,7 @@ export interface RoomBannerProps {
 
 function RoomBanner({ room }: RoomBannerProps) {
   return (
-    <div className="flex flex-col items-start p-4 flex-shrink-0 relative">
+    <div className="flex flex-col items-start p-4 flex-shrink-0 relative h-20">
       <div className="z-10 absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black to-transparent"></div>
       <h2 className="z-20 leading-none text-lg font-bold text-pink-500">
         {room?.name}
