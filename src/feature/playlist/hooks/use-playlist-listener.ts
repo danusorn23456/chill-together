@@ -55,7 +55,7 @@ function usePlaylistListener({ room, user }: usePlaylistListenerProps) {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!room?.id) return;
+      if (!room?.id || !user) return;
 
       async function callGetPlayedPlaylist() {
         const { data, error } = await getPlayedPlaylist({ room_id: room!.id });
@@ -87,7 +87,13 @@ function usePlaylistListener({ room, user }: usePlaylistListenerProps) {
         filter: `room_id=eq.${room.id}`,
       } as RealtimePostgresChangesFilter<"UPDATE">;
 
-      channelRef.current = supabase.channel(Channel.ROOM_PLAYLIST + room.id);
+      channelRef.current = supabase.channel(Channel.ROOM_PLAYLIST + room.id, {
+        config: {
+          presence: {
+            key: user.id,
+          },
+        },
+      });
 
       const channel = channelRef.current;
 
@@ -118,7 +124,7 @@ function usePlaylistListener({ room, user }: usePlaylistListenerProps) {
         channel.unsubscribe();
       };
     },
-    [room]
+    [room, user]
   );
 
   return {

@@ -137,9 +137,15 @@ function useRoomListener({ roomId, user }: UseRoomListenerProps) {
 
   useEffect(
     function performRealtimeSubscribe() {
-      if (!room) return;
+      if (!room || !user) return;
 
-      usersChannel.current = supabase.channel(Channel.ROOM_USERS + roomId);
+      usersChannel.current = supabase.channel(Channel.ROOM_USERS + roomId, {
+        config: {
+          presence: {
+            key: user.id,
+          },
+        },
+      });
 
       const channel = usersChannel.current;
 
@@ -155,7 +161,7 @@ function useRoomListener({ roomId, user }: UseRoomListenerProps) {
         channel.unsubscribe();
       };
     },
-    [room]
+    [room, user]
   );
 
   return { loading, room, onlineUsers, leaveRoom };

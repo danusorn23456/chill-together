@@ -89,7 +89,13 @@ function useChatListener({ room, user, users }: UseChatListenerProps) {
         return;
       }
 
-      chatChannel.current = supabase.channel(Channel.ROOM_MESSAGES + room!.id);
+      chatChannel.current = supabase.channel(Channel.ROOM_MESSAGES + room!.id, {
+        config: {
+          presence: {
+            key: user.id,
+          },
+        },
+      });
 
       const channel = chatChannel.current;
 
