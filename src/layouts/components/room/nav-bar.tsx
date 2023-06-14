@@ -8,7 +8,7 @@ function NavBar({}: NavBarProps) {
 
   return (
     <div className="fixed z-10 flex w-full bg-gray-900 h-10 border-b border-gray-950">
-      <div className="flex-1 md:border-r border-gray-950 flex items-center p-2 space-x-1">
+      <div className="flex-1 lg:border-r border-gray-950 flex items-center p-2 space-x-1">
         <h2 className="text-gray-300 text-xs md:text-md">
           {title || "waiting for some music"}
         </h2>

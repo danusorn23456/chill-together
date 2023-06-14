@@ -80,13 +80,14 @@ function Room() {
 
   const loading = roomLoading || playlistLoading || messageLoading;
 
-  if (loading) {
-    return <></>;
-  }
-
   return (
-    <div className="flex flex-col md:flex-row flex-1">
-      <div className="flex-1 md:flex-2 relative">
+    <div className="flex flex-col lg:flex-row flex-1">
+      {loading ? (
+        <div className="animated-fade-in absolute top-0 left-0 w-full h-full bg-blue-900/50"></div>
+      ) : (
+        <></>
+      )}
+      <div className="flex-1 lg:flex-2 relative">
         <Screen
           render={onlineUsers?.map((user, index) => (
             <AnimatedAvatar
@@ -121,7 +122,7 @@ function Room() {
           }
         />
       </div>
-      <div className="flex-1 md:flex-initial md:w-96 flex flex-col overflow-hidden bg-gray-900 z-20">
+      <div className="flex-1 lg:flex-initial lg:w-96 flex flex-col overflow-hidden bg-gray-900 z-20">
         <Tab defaultActiveKey="chat" items={tabItems} />
       </div>
     </div>
