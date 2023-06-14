@@ -3,8 +3,7 @@ import {
   ChatBubbleLeftEllipsisIcon,
   UserCircleIcon,
 } from "@heroicons/react/20/solid";
-import { useEffect, useMemo } from "react";
-import { useSetRecoilState } from "recoil";
+import { useMemo } from "react";
 import { AnimatedAvatar, Screen } from "~/feature/animation";
 import { useUser } from "~/feature/auth";
 import { ChatWidget, useChatListener } from "~/feature/chat";
