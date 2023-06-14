@@ -138,4 +138,16 @@ send selected playlist information to <span style="color:orange">data table medi
 <span style="color:orange">data table media to null</span></sub>
 
 `pause playlist` from `youtube player`
+<br>
 <sub>in develop</sub>
+
+`messages`
+<br>
+<sub>render message from <span style="color:orange">data table messages by room_id</span>
+<sub>
+
+`send message`
+<br>
+<sub>
+send message to <span style="color:orange">data table messages by room id</span> so after that when database change useMessagesListener() will trigger so new messages will get render
+</sub>
